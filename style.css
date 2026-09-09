@@ -63,6 +63,12 @@ header h1 {
   display: block;
   width: 100%;
   height: auto;
+  filter: blur(20px);
+  transition: filter 1s ease;
+}
+
+.grid figure:hover img {
+  filter: blur(0);
 }
 
 footer {
