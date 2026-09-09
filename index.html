@@ -39,6 +39,27 @@
       [photos[i], photos[randomIndex]] = [photos[randomIndex], photos[i]];
     }
 
+    function createRowSizes(total) {
+      const sizes = [];
+      let remaining = total;
+
+      while (remaining > 0) {
+        const choices = [];
+        for (let size = 3; size <= Math.min(7, remaining); size++) {
+          const rest = remaining - size;
+          if (rest === 0 || rest >= 3) choices.push(size);
+        }
+
+        const size = choices[Math.floor(Math.random() * choices.length)];
+        sizes.push(size);
+        remaining -= size;
+      }
+
+      return sizes;
+    }
+
+    const rowSizes = createRowSizes(TOTAL);
+
     photos.forEach((src, index) => {
       const figure = document.createElement('figure');
       const img = document.createElement('img');
@@ -53,41 +74,47 @@
 
     let layoutFrame;
 
-    function getColumnCount() {
-      if (window.innerWidth <= 480) return 2;
-      if (window.innerWidth <= 720) return 3;
-      if (window.innerWidth <= 1000) return 4;
-      return 5;
-    }
-
     function scheduleLayout() {
       cancelAnimationFrame(layoutFrame);
-      layoutFrame = requestAnimationFrame(layoutMasonry);
+      layoutFrame = requestAnimationFrame(layoutGallery);
     }
 
-    function layoutMasonry() {
-      const columnCount = getColumnCount();
-      const columnWidth = grid.clientWidth / columnCount;
-      const columnHeights = Array(columnCount).fill(0);
+    function layoutGallery() {
+      const containerWidth = grid.clientWidth;
       const figures = [...grid.querySelectorAll('figure')];
+      let figureIndex = 0;
+      let top = 0;
 
-      figures.forEach((figure) => {
-        const img = figure.querySelector('img');
-        const ratio = img.naturalWidth && img.naturalHeight
-          ? img.naturalWidth / img.naturalHeight
-          : 1;
-        const column = columnHeights.indexOf(Math.min(...columnHeights));
-        const height = columnWidth / ratio;
+      rowSizes.forEach((rowSize) => {
+        const row = figures.slice(figureIndex, figureIndex + rowSize);
+        const ratios = row.map((figure) => {
+          const img = figure.querySelector('img');
+          return img.naturalWidth && img.naturalHeight
+            ? img.naturalWidth / img.naturalHeight
+            : 1;
+        });
+        const ratioTotal = ratios.reduce((sum, ratio) => sum + ratio, 0);
+        const rowHeight = containerWidth / ratioTotal;
+        let left = 0;
 
-        figure.style.width = `${columnWidth}px`;
-        figure.style.height = `${height}px`;
-        figure.style.left = `${column * columnWidth}px`;
-        figure.style.top = `${columnHeights[column]}px`;
+        row.forEach((figure, index) => {
+          const width = index === row.length - 1
+            ? containerWidth - left
+            : rowHeight * ratios[index];
 
-        columnHeights[column] += height;
+          figure.style.width = `${width}px`;
+          figure.style.height = `${rowHeight}px`;
+          figure.style.left = `${left}px`;
+          figure.style.top = `${top}px`;
+
+          left += width;
+        });
+
+        top += rowHeight;
+        figureIndex += rowSize;
       });
 
-      grid.style.height = `${Math.max(...columnHeights)}px`;
+      grid.style.height = `${top}px`;
     }
 
     window.addEventListener('load', scheduleLayout);
