@@ -53,7 +53,7 @@ header h1 {
   padding: 0;
   border: 0;
   overflow: visible;
-  filter: blur(20px);
+  filter: blur(20px) saturate(1.2);
   transition: filter 1s ease;
   cursor: zoom-in;
 }
@@ -67,7 +67,7 @@ header h1 {
 
 .grid figure:hover {
   z-index: 1;
-  filter: blur(0);
+  filter: blur(0) saturate(1);
 }
 
 footer {
