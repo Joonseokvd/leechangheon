@@ -54,7 +54,7 @@ header h1 {
   padding: 0;
   border: 0;
   overflow: visible;
-  filter: blur(24px) saturate(1.2);
+  filter: blur(24px) saturate(1.5);
   transform: scale(1.06);
   transform-origin: center;
   mix-blend-mode: multiply;
