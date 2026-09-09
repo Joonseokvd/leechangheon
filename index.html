@@ -39,30 +39,11 @@
       [photos[i], photos[randomIndex]] = [photos[randomIndex], photos[i]];
     }
 
-    function createRowSizes(total) {
-      const sizes = [];
-      let remaining = total;
-
-      while (remaining > 0) {
-        const choices = [];
-        for (let size = 3; size <= Math.min(7, remaining); size++) {
-          const rest = remaining - size;
-          if (rest === 0 || rest >= 3) choices.push(size);
-        }
-
-        const size = choices[Math.floor(Math.random() * choices.length)];
-        sizes.push(size);
-        remaining -= size;
-      }
-
-      return sizes;
-    }
-
-    const rowSizes = createRowSizes(TOTAL);
 
     photos.forEach((src, index) => {
       const figure = document.createElement('figure');
       const img = document.createElement('img');
+      figure.dataset.layoutRandom = Math.random();
       img.src = src;
       img.alt = `photo ${src.match(/\d+/)[0]}`;
       img.loading = 'eager';
@@ -82,39 +63,58 @@
     function layoutGallery() {
       const containerWidth = grid.clientWidth;
       const figures = [...grid.querySelectorAll('figure')];
-      let figureIndex = 0;
-      let top = 0;
+      const trackCount = containerWidth > 1200 ? 7
+        : containerWidth > 900 ? 6
+        : containerWidth > 700 ? 5
+        : containerWidth > 480 ? 4
+        : 3;
+      const trackWidth = containerWidth / trackCount;
+      const skyline = Array(trackCount).fill(0);
 
-      rowSizes.forEach((rowSize) => {
-        const row = figures.slice(figureIndex, figureIndex + rowSize);
-        const ratios = row.map((figure) => {
-          const img = figure.querySelector('img');
-          return img.naturalWidth && img.naturalHeight
-            ? img.naturalWidth / img.naturalHeight
-            : 1;
+      figures.forEach((figure) => {
+        const img = figure.querySelector('img');
+        const ratio = img.naturalWidth && img.naturalHeight
+          ? img.naturalWidth / img.naturalHeight
+          : 1;
+        const random = Number(figure.dataset.layoutRandom);
+
+        let span = ratio >= 1.7 ? 3 : ratio >= 1.05 ? 2 : 1;
+        if (random > 0.8) span += 1;
+        if (random < 0.15) span -= 1;
+        span = Math.max(1, Math.min(3, trackCount, span));
+
+        const starts = Array.from(
+          { length: trackCount - span + 1 },
+          (_, index) => index
+        );
+        const rotation = Math.floor(random * starts.length);
+        const candidates = starts.slice(rotation).concat(starts.slice(0, rotation));
+
+        let bestStart = candidates[0];
+        let bestTop = Infinity;
+
+        candidates.forEach((start) => {
+          const top = Math.max(...skyline.slice(start, start + span));
+          if (top < bestTop) {
+            bestTop = top;
+            bestStart = start;
+          }
         });
-        const ratioTotal = ratios.reduce((sum, ratio) => sum + ratio, 0);
-        const rowHeight = containerWidth / ratioTotal;
-        let left = 0;
 
-        row.forEach((figure, index) => {
-          const width = index === row.length - 1
-            ? containerWidth - left
-            : rowHeight * ratios[index];
+        const width = trackWidth * span;
+        const height = width / ratio;
 
-          figure.style.width = `${width}px`;
-          figure.style.height = `${rowHeight}px`;
-          figure.style.left = `${left}px`;
-          figure.style.top = `${top}px`;
+        figure.style.width = `${width}px`;
+        figure.style.height = `${height}px`;
+        figure.style.left = `${bestStart * trackWidth}px`;
+        figure.style.top = `${bestTop}px`;
 
-          left += width;
-        });
-
-        top += rowHeight;
-        figureIndex += rowSize;
+        for (let track = bestStart; track < bestStart + span; track++) {
+          skyline[track] = bestTop + height;
+        }
       });
 
-      grid.style.height = `${top}px`;
+      grid.style.height = `${Math.max(...skyline)}px`;
     }
 
     window.addEventListener('load', scheduleLayout);
