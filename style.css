@@ -39,18 +39,17 @@ header h1 {
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0;
+  column-count: 5;
+  column-gap: 0;
   width: 100%;
   margin: 0;
   padding: 0;
-  align-items: start;
 }
 
 .grid figure {
   margin: 0;
   padding: 0;
+  break-inside: avoid;
   cursor: zoom-in;
 }
 
@@ -121,19 +120,19 @@ footer {
 
 @media (max-width: 1000px) {
   .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-count: 4;
   }
 }
 
 @media (max-width: 720px) {
   .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-count: 3;
   }
 }
 
 @media (max-width: 480px) {
   .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-count: 2;
   }
 
   .lightbox .prev,
