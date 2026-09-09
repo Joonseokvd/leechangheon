@@ -83,23 +83,33 @@
         if (random < 0.15) span -= 1;
         span = Math.max(1, Math.min(3, trackCount, span));
 
-        const starts = Array.from(
-          { length: trackCount - span + 1 },
-          (_, index) => index
-        );
-        const rotation = Math.floor(random * starts.length);
-        const candidates = starts.slice(rotation).concat(starts.slice(0, rotation));
-
-        let bestStart = candidates[0];
+        let bestStart = 0;
         let bestTop = Infinity;
+        let placementFound = false;
 
-        candidates.forEach((start) => {
-          const top = Math.max(...skyline.slice(start, start + span));
-          if (top < bestTop) {
-            bestTop = top;
-            bestStart = start;
-          }
-        });
+        while (!placementFound && span >= 1) {
+          const starts = Array.from(
+            { length: trackCount - span + 1 },
+            (_, index) => index
+          );
+          const rotation = Math.floor(random * starts.length);
+          const candidates = starts.slice(rotation).concat(starts.slice(0, rotation));
+
+          candidates.forEach((start) => {
+            const levels = skyline.slice(start, start + span);
+            const top = Math.max(...levels);
+            const bottom = Math.min(...levels);
+            const isFlat = top - bottom < 0.5;
+
+            if (isFlat && top < bestTop) {
+              bestTop = top;
+              bestStart = start;
+              placementFound = true;
+            }
+          });
+
+          if (!placementFound) span -= 1;
+        }
 
         const width = trackWidth * span;
         const height = width / ratio;
