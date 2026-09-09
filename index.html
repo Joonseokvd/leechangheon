@@ -29,20 +29,30 @@
     const lightboxImg = document.getElementById('lightbox-img');
     let current = 0;
 
-    for (let i = 1; i <= TOTAL; i++) {
+    const photos = Array.from(
+      { length: TOTAL },
+      (_, index) => `photos/${index + 1}.webp`
+    );
+
+    for (let i = photos.length - 1; i > 0; i--) {
+      const randomIndex = Math.floor(Math.random() * (i + 1));
+      [photos[i], photos[randomIndex]] = [photos[randomIndex], photos[i]];
+    }
+
+    photos.forEach((src, index) => {
       const figure = document.createElement('figure');
       const img = document.createElement('img');
-      img.src = `photos/${i}.webp`;
-      img.alt = `photo ${i}`;
+      img.src = src;
+      img.alt = `photo ${src.match(/\d+/)[0]}`;
       img.loading = 'lazy';
       figure.appendChild(img);
-      figure.addEventListener('click', () => openLightbox(i - 1));
+      figure.addEventListener('click', () => openLightbox(index));
       grid.appendChild(figure);
-    }
+    });
 
     function openLightbox(index) {
       current = index;
-      lightboxImg.src = `photos/${current + 1}.webp`;
+      lightboxImg.src = photos[current];
       lightbox.classList.add('open');
     }
     function closeLightbox() {
@@ -50,7 +60,7 @@
     }
     function show(delta) {
       current = (current + delta + TOTAL) % TOTAL;
-      lightboxImg.src = `photos/${current + 1}.webp`;
+      lightboxImg.src = photos[current];
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
