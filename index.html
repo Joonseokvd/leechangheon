@@ -44,11 +44,55 @@
       const img = document.createElement('img');
       img.src = src;
       img.alt = `photo ${src.match(/\d+/)[0]}`;
-      img.loading = 'lazy';
+      img.loading = 'eager';
+      img.addEventListener('load', scheduleLayout);
       figure.appendChild(img);
       figure.addEventListener('click', () => openLightbox(index));
       grid.appendChild(figure);
     });
+
+    let layoutFrame;
+
+    function getColumnCount() {
+      if (window.innerWidth <= 480) return 2;
+      if (window.innerWidth <= 720) return 3;
+      if (window.innerWidth <= 1000) return 4;
+      return 5;
+    }
+
+    function scheduleLayout() {
+      cancelAnimationFrame(layoutFrame);
+      layoutFrame = requestAnimationFrame(layoutMasonry);
+    }
+
+    function layoutMasonry() {
+      const columnCount = getColumnCount();
+      const columnWidth = grid.clientWidth / columnCount;
+      const columnHeights = Array(columnCount).fill(0);
+      const figures = [...grid.querySelectorAll('figure')];
+
+      figures.forEach((figure) => {
+        const img = figure.querySelector('img');
+        const ratio = img.naturalWidth && img.naturalHeight
+          ? img.naturalWidth / img.naturalHeight
+          : 1;
+        const column = columnHeights.indexOf(Math.min(...columnHeights));
+        const height = columnWidth / ratio;
+
+        figure.style.width = `${columnWidth}px`;
+        figure.style.height = `${height}px`;
+        figure.style.left = `${column * columnWidth}px`;
+        figure.style.top = `${columnHeights[column]}px`;
+
+        columnHeights[column] += height;
+      });
+
+      grid.style.height = `${Math.max(...columnHeights)}px`;
+    }
+
+    window.addEventListener('load', scheduleLayout);
+    window.addEventListener('resize', scheduleLayout);
+    scheduleLayout();
 
     function openLightbox(index) {
       current = index;
