@@ -16,10 +16,8 @@
   <footer>&copy; 2026 leechangheon</footer>
 
   <div class="lightbox" id="lightbox">
-    <button class="close" aria-label="close">&times;</button>
-    <button class="nav prev" aria-label="previous">&#10094;</button>
+    <button class="close" aria-label="close"></button>
     <img id="lightbox-img" src="" alt="">
-    <button class="nav next" aria-label="next">&#10095;</button>
   </div>
 
   <script>
@@ -145,8 +143,6 @@
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
-    lightbox.querySelector('.prev').addEventListener('click', () => show(-1));
-    lightbox.querySelector('.next').addEventListener('click', () => show(1));
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
