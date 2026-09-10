@@ -134,7 +134,62 @@
       footer.classList.toggle('over-gallery', isOverGallery);
     }
 
-    window.addEventListener('load', scheduleLayout);
+    const mobileQuery = window.matchMedia(
+      '(max-width: 768px) and (hover: none), ' +
+      '(max-width: 768px) and (pointer: coarse)'
+    );
+
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function getVisibleFigures(excludedFigure) {
+      return [...grid.querySelectorAll('figure')].filter((figure) => {
+        const rect = figure.getBoundingClientRect();
+        return figure !== excludedFigure &&
+          rect.bottom > 0 &&
+          rect.top < window.innerHeight &&
+          rect.right > 0 &&
+          rect.left < window.innerWidth;
+      });
+    }
+
+    async function runMobileSequence() {
+      if (!mobileQuery.matches) return;
+
+      document.body.classList.add('mobile-sequence');
+      let activeFigure = null;
+
+      for (let round = 0; round < 3; round++) {
+        let candidates = getVisibleFigures(activeFigure);
+
+        while (!candidates.length) {
+          await delay(200);
+          candidates = getVisibleFigures(activeFigure);
+        }
+
+        const nextFigure =
+          candidates[Math.floor(Math.random() * candidates.length)];
+
+        nextFigure.classList.add('mobile-clear');
+        if (activeFigure) activeFigure.classList.remove('mobile-clear');
+        activeFigure = nextFigure;
+
+        await delay(1500);
+      }
+
+      document.body.classList.add('mobile-complete');
+      document.body.classList.remove('mobile-sequence');
+      if (activeFigure) activeFigure.classList.remove('mobile-clear');
+
+      await delay(500);
+      document.body.classList.add('effects-disabled');
+    }
+
+    window.addEventListener('load', () => {
+      scheduleLayout();
+      setTimeout(runMobileSequence, 100);
+    });
     window.addEventListener('resize', scheduleLayout);
     window.addEventListener('scroll', updateFooterColor, { passive: true });
     scheduleLayout();
