@@ -122,8 +122,9 @@
       const gridRect = grid.getBoundingClientRect();
       const footerRect = footer.getBoundingClientRect();
       const footerCenter = footerRect.top + footerRect.height / 2;
+      const fadeStart = gridRect.bottom - window.innerHeight * 0.33;
       const isOverGallery =
-        footerCenter >= gridRect.top && footerCenter <= gridRect.bottom;
+        footerCenter >= gridRect.top && footerCenter <= fadeStart;
 
       footer.classList.toggle('over-gallery', isOverGallery);
     }
