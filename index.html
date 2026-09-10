@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <h1>이창헌</h1>
+    <h1><button type="button" id="reload-page">이창헌 Lee changheon</button></h1>
   </header>
 
   <main class="grid" id="grid"></main>
@@ -26,7 +26,12 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const footer = document.querySelector('footer');
+    const reloadButton = document.getElementById('reload-page');
     let current = 0;
+
+    reloadButton.addEventListener('click', () => {
+      window.location.reload();
+    });
 
     const photos = Array.from(
       { length: TOTAL },
