@@ -60,7 +60,12 @@
 
     function layoutGallery() {
       const containerWidth = grid.clientWidth;
-      const figures = [...grid.querySelectorAll('figure')];
+      const allFigures = [...grid.querySelectorAll('figure')];
+      const closingCount = 5 + Math.floor(
+        Number(allFigures[0]?.dataset.layoutRandom || 0) * 3
+      );
+      const figures = allFigures.slice(0, -closingCount);
+      const closingFigures = allFigures.slice(-closingCount);
       const trackCount = containerWidth > 1200 ? 7
         : containerWidth > 900 ? 6
         : containerWidth > 700 ? 5
@@ -122,7 +127,36 @@
         }
       });
 
-      grid.style.height = `${Math.max(...skyline)}px`;
+      const mainBottom = Math.max(...skyline);
+      const closingRatios = closingFigures.map((figure) => {
+        const img = figure.querySelector('img');
+        return img.naturalWidth && img.naturalHeight
+          ? img.naturalWidth / img.naturalHeight
+          : 1;
+      });
+      const closingRatioTotal = closingRatios.reduce(
+        (sum, ratio) => sum + ratio,
+        0
+      );
+      const closingHeight = containerWidth / closingRatioTotal;
+      const closingTop = Math.max(0, mainBottom - closingHeight);
+      let closingLeft = 0;
+
+      closingFigures.forEach((figure, index) => {
+        const width = index === closingFigures.length - 1
+          ? containerWidth - closingLeft
+          : closingHeight * closingRatios[index];
+
+        figure.style.width = `${width}px`;
+        figure.style.height = `${closingHeight}px`;
+        figure.style.left = `${closingLeft}px`;
+        figure.style.top = `${closingTop}px`;
+        figure.style.zIndex = 0;
+
+        closingLeft += width;
+      });
+
+      grid.style.height = `${Math.max(mainBottom, closingTop + closingHeight)}px`;
     }
 
     window.addEventListener('load', scheduleLayout);
