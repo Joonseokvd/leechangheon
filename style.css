@@ -95,18 +95,24 @@ header h1 {
 
 footer {
   position: fixed;
-  right: 16px;
+  left: 50%;
   bottom: 16px;
   z-index: 100;
-  width: auto;
+  width: max-content;
   height: auto;
   margin: 0;
   padding: 0;
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1;
-  text-align: right;
+  text-align: center;
+  transform: translateX(-50%);
+  transition: color 0.2s ease;
   pointer-events: none;
+}
+
+footer.over-gallery {
+  color: #fff;
 }
 
 /* lightbox */
