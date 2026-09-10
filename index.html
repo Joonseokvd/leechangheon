@@ -25,6 +25,7 @@
     const grid = document.getElementById('grid');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
+    const footer = document.querySelector('footer');
     let current = 0;
 
     const photos = Array.from(
@@ -114,11 +115,24 @@
       });
 
       grid.style.height = `${equalHeight}px`;
+      updateFooterColor();
+    }
+
+    function updateFooterColor() {
+      const gridRect = grid.getBoundingClientRect();
+      const footerRect = footer.getBoundingClientRect();
+      const footerCenter = footerRect.top + footerRect.height / 2;
+      const isOverGallery =
+        footerCenter >= gridRect.top && footerCenter <= gridRect.bottom;
+
+      footer.classList.toggle('over-gallery', isOverGallery);
     }
 
     window.addEventListener('load', scheduleLayout);
     window.addEventListener('resize', scheduleLayout);
+    window.addEventListener('scroll', updateFooterColor, { passive: true });
     scheduleLayout();
+    updateFooterColor();
 
     function openLightbox(index) {
       current = index;
