@@ -198,3 +198,51 @@ footer.over-gallery {
   transform: rotate(-45deg);
 }
 
+
+@media (max-width: 768px) and (hover: none),
+       (max-width: 768px) and (pointer: coarse) {
+  .grid figure:hover {
+    z-index: auto;
+    filter: blur(24px) saturate(1.7) brightness(1.2);
+    transform: scale(1.06);
+    mix-blend-mode: multiply;
+    opacity: 0.94;
+  }
+
+  body.mobile-sequence .grid figure {
+    transition:
+      filter 0.5s ease,
+      transform 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  body.mobile-sequence .grid figure.mobile-clear {
+    z-index: 20;
+    filter: blur(0) saturate(1) brightness(1);
+    transform: scale(1);
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+
+  body.mobile-complete .grid figure,
+  body.mobile-complete .grid figure:hover {
+    z-index: auto;
+    filter: none;
+    transform: scale(1);
+    mix-blend-mode: normal;
+    opacity: 1;
+    transition:
+      filter 0.5s ease,
+      transform 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  body.effects-disabled .grid figure,
+  body.effects-disabled .grid figure:hover {
+    filter: none;
+    transform: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+    transition: none;
+  }
+}
