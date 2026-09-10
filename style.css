@@ -116,7 +116,7 @@ header h1 button {
 }
 
 .grid figure:hover {
-  z-index: 20;
+  z-index: 1;
   filter: blur(0) saturate(1) brightness(1);
   transform: scale(1);
   mix-blend-mode: normal;
@@ -217,7 +217,7 @@ footer.over-gallery {
   }
 
   body.mobile-sequence .grid figure.mobile-clear {
-    z-index: 20;
+    z-index: 1;
     filter: blur(0) saturate(1) brightness(1);
     transform: scale(1);
     mix-blend-mode: normal;
