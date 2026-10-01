@@ -44,12 +44,12 @@ body {
 }
 
 .symbol {
-  letter-spacing: 0.05em;
-  margin: 0 0.05em;
+  display: inline-block;
+  margin: 0 0.16em;
 }
 
 .open-paren {
-  margin-left: 0.05em;
+  margin-left: 0.16em;
 }
 
 header {
