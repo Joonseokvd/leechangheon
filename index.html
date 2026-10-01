@@ -8,14 +8,14 @@
 </head>
 <body>
   <header>
-    <h1><button type="button" id="reload-page">이창 Lee Chang</button></h1>
+    <h1><button type="button" id="reload-page">이창 <span class="en">Lee Chang</span></button></h1>
   </header>
 
   <main class="grid" id="grid"></main>
 
   <footer>
-    <a class="footer-mail" href="mailto:lee.changlegs@gmail.com">✉ lee.changlegs@gmail.com</a>
-    <span class="footer-copyright">&copy; 2026 이창 Lee Chang</span>
+    <a class="footer-mail" href="mailto:lee.changlegs@gmail.com">✉ <span class="en">lee.changlegs@gmail.com</span></a>
+    <span class="footer-copyright">&copy; <span class="en">2026</span> 이창 <span class="en">Lee Chang</span></span>
   </footer>
 
   <div class="lightbox" id="lightbox">
@@ -114,6 +114,23 @@
     reloadButton.addEventListener('click', () => {
       window.location.reload();
     });
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatEnglishText(text) {
+      const escaped = escapeHtml(text);
+      return escaped.replace(
+        /[A-Za-z0-9][A-Za-z0-9\s.,'’:&()/-]*/g,
+        '<span class="en">$&</span>'
+      );
+    }
 
     const photos = Array.from(
       { length: TOTAL },
@@ -357,7 +374,7 @@
       const src = photos[current];
       const photoNumber = Number(src.match(/\d+/)[0]);
       lightboxImg.src = src;
-      lightboxCaption.textContent = captions[photoNumber] || "";
+      lightboxCaption.innerHTML = formatEnglishText(captions[photoNumber] || "");
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
