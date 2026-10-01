@@ -154,7 +154,7 @@ footer.over-gallery {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 24px;
+  padding: 24px 24px 64px;
 }
 
 .lightbox.open {
@@ -163,8 +163,22 @@ footer.over-gallery {
 
 .lightbox img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: calc(100% - 40px);
   object-fit: contain;
+}
+
+.lightbox-caption {
+  position: absolute;
+  right: 24px;
+  bottom: 16px;
+  left: 24px;
+  margin: 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .lightbox .close {
