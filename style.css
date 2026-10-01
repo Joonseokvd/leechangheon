@@ -138,11 +138,16 @@ footer {
   text-align: center;
   transform: translateX(-50%);
   transition: color 0.2s ease;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 footer.over-gallery {
   color: #fff;
+}
+
+footer a {
+  color: inherit;
+  text-decoration: none;
 }
 
 /* lightbox */
