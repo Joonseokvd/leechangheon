@@ -37,6 +37,10 @@
     const sampleContext = sampleCanvas.getContext('2d', { willReadFrequently: true });
     let current = 0;
 
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
     const captions = {
       1: "멀리서 들리는 소리들 │ Sounds Heard from Afar │ 2024—2025 │ oil on canvas │ 100×80(cm)",
       2: "노란 진심에게 짙은 나무가 │ from Dark Trees to Yellow Sincerity │ 2024—2025 │ oil on canvas │ 100×73(cm)",
@@ -112,6 +116,7 @@
     };
 
     reloadButton.addEventListener('click', () => {
+      window.scrollTo(0, 0);
       window.location.reload();
     });
 
@@ -353,6 +358,7 @@
     }
 
     window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
       scheduleLayout();
       setTimeout(runMobileSequence, 100);
     });
