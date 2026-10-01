@@ -43,6 +43,11 @@ body {
   letter-spacing: 0.01em;
 }
 
+.symbol {
+  letter-spacing: 0.01em;
+  margin: 0 0.01em;
+}
+
 header {
   position: fixed;
   top: 0;
