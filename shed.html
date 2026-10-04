@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-7">
+<link rel="stylesheet" href="style.css?v=20261005-8">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -239,13 +239,13 @@
         .replace(/\(/g, '<span class="open-paren">(</span>');
     }
 
-    function formatCaption(text, separator = '<br>') {
+    function formatCaption(text, separator = '<br>', showArrow = false) {
       const parts = text.split(' │ ');
       const titleCount = Math.max(1, parts.length - 3);
 
       return parts.map((part, index) => {
-        const prefix = index === 0 ? '↗ ' : '';
-        const formatted = formatText(`${prefix}${part}`);
+        const suffix = showArrow && index === 0 ? ' ↗' : '';
+        const formatted = formatText(`${part}${suffix}`);
 
         if (index >= titleCount) return formatted;
 
@@ -313,7 +313,7 @@
         card.dataset.index = String(index);
         card.innerHTML = `
           <img src="photos/${artwork.id}.webp" alt="${escapeHtml(artwork.caption)}" loading="lazy" decoding="async">
-          <span class="work-caption">${formatCaption(artwork.caption)}</span>
+          <span class="work-caption">${formatCaption(artwork.caption, '<br>', true)}</span>
         `;
         card.addEventListener('click', (event) => {
           event.preventDefault();
