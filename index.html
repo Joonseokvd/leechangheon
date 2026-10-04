@@ -361,8 +361,8 @@
       document.body.classList.remove('mobile-sequence');
       if (activeFigure) activeFigure.classList.remove('mobile-clear');
 
-      await delay(500);
-      document.body.classList.add('effects-disabled');
+      await delay(1500);
+      document.body.classList.remove('mobile-complete');
     }
 
     window.addEventListener('load', () => {
