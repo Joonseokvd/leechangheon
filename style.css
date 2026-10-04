@@ -232,6 +232,33 @@ body.shed-page {
   padding: 18px;
 }
 
+.shed-intro {
+  max-width: 640px;
+  margin: 0 0 36px;
+  font-size: inherit;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.shed-intro p {
+  margin: 0 0 18px;
+}
+
+.shed-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.shed-intro a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shed-intro a:hover,
+.shed-intro a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .work-filter {
   margin-bottom: 18px;
   font-size: inherit;
@@ -465,6 +492,15 @@ body.shed-page .lightbox-caption {
   .work,
   .shed {
     padding: 10px;
+  }
+
+  .shed-intro {
+    max-width: none;
+    margin-bottom: 28px;
+  }
+
+  .shed-intro p {
+    margin-bottom: 14px;
   }
 
   .work-filter {
