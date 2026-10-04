@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-1">
+<link rel="stylesheet" href="style.css?v=20261005-2">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -15,7 +15,7 @@
   <main class="work shed">
     <section class="work-filter" aria-label="Shed filters">
       <button class="work-filter-toggle" type="button" aria-expanded="true" aria-controls="work-filter-panel">
-        꼭지 <span class="en">Filter</span><span class="work-filter-count" id="work-filter-count"></span>
+        <span class="en">Filter</span><span class="work-filter-count" id="work-filter-count"></span>
       </button>
       <div class="work-filter-panel" id="work-filter-panel">
         <div class="work-filter-group" data-filter-group="size">
@@ -37,11 +37,11 @@
     <section class="work-grid" id="shed-grid" aria-label="All works"></section>
   </main>
 
-  <footer>
-    <a class="footer-mail" href="mailto:lee.changlegs@gmail.com">✉ <span class="en">lee.changlegs@gmail.com</span></a>
-    <a class="footer-shed" href="shed.html">헛간 <span class="en">Shed</span></a>
-    <span class="footer-copyright">&copy; <span class="en">2026</span> 이창 <span class="en">Lee Chang</span></span>
-  </footer>
+  <div class="lightbox" id="lightbox">
+    <button class="close" aria-label="close"></button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
 
   <script>
     const rawArtworks = `
@@ -123,7 +123,11 @@
     const panel = document.getElementById('work-filter-panel');
     const toggle = document.querySelector('.work-filter-toggle');
     const clear = document.getElementById('work-filter-clear');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
     const activeFilters = { size: new Set(), material: new Set(), year: new Set() };
+    let current = 0;
 
     const artworks = rawArtworks.trim().split('\n').map((row) => {
       const [id, caption] = row.split('|');
@@ -154,6 +158,10 @@
         )
         .replace(/[—×]/g, '<span class="symbol">$&</span>')
         .replace(/\(/g, '<span class="open-paren">(</span>');
+    }
+
+    function formatCaption(text) {
+      return text.split(' │ ').map((part) => formatText(part)).join('<br>');
     }
 
     function createButton(group, value) {
@@ -194,17 +202,22 @@
     }
 
     function renderGrid() {
-      artworks.forEach((artwork) => {
+      artworks.forEach((artwork, index) => {
         const card = document.createElement('a');
         card.className = 'work-card';
         card.href = `photos/${artwork.id}.webp`;
         card.dataset.size = artwork.size;
         card.dataset.material = artwork.material;
         card.dataset.year = artwork.year;
+        card.dataset.index = String(index);
         card.innerHTML = `
           <img src="photos/${artwork.id}.webp" alt="${escapeHtml(artwork.caption)}" loading="lazy" decoding="async">
-          <span class="work-caption">${formatText(artwork.caption)}</span>
+          <span class="work-caption">${formatCaption(artwork.caption)}</span>
         `;
+        card.addEventListener('click', (event) => {
+          event.preventDefault();
+          openLightbox(index);
+        });
         grid.appendChild(card);
       });
     }
@@ -237,6 +250,39 @@
         button.classList.remove('is-active');
       });
       applyFilters();
+    });
+
+    function openLightbox(index) {
+      current = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+    }
+
+    function show(delta) {
+      current = (current + delta + artworks.length) % artworks.length;
+      updateLightbox();
+    }
+
+    function updateLightbox() {
+      const artwork = artworks[current];
+      lightboxImg.src = `photos/${artwork.id}.webp`;
+      lightboxImg.alt = artwork.caption;
+      lightboxCaption.innerHTML = formatCaption(artwork.caption);
+    }
+
+    lightbox.querySelector('.close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') show(-1);
+      if (event.key === 'ArrowRight') show(1);
     });
 
     renderFilters();
