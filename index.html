@@ -183,7 +183,8 @@
       const containerWidth = grid.clientWidth;
       const figures = [...grid.querySelectorAll('figure')];
       const firstRandom = Number(figures[0]?.dataset.layoutRandom || 0);
-      const columnCount = 3 + Math.floor(firstRandom * 5);
+      const minColumnCount = mobileQuery.matches ? 4 : 3;
+      const columnCount = minColumnCount + Math.floor(firstRandom * (8 - minColumnCount));
       const columns = Array.from({ length: columnCount }, () => []);
 
       figures.forEach((figure, index) => {
