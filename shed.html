@@ -132,12 +132,14 @@
     const artworks = rawArtworks.trim().split('\n').map((row) => {
       const [id, caption] = row.split('|');
       const parts = caption.split(' │ ');
+      const size = parts[parts.length - 1];
       return {
         id: Number(id),
         caption,
         year: parts[parts.length - 3],
         material: parts[parts.length - 2],
-        size: parts[parts.length - 1]
+        size,
+        sizeGroup: getSizeGroup(size)
       };
     });
 
@@ -164,6 +166,16 @@
       return text.split(' │ ').map((part) => formatText(part)).join('<br>');
     }
 
+    function getSizeGroup(size) {
+      const dimensions = size.match(/(\d+)×(\d+)/);
+      if (!dimensions) return '중간';
+
+      const area = Number(dimensions[1]) * Number(dimensions[2]);
+      if (area > 4380) return '큰';
+      if (area > 1000) return '중간';
+      return '작은';
+    }
+
     function createButton(group, value) {
       const button = document.createElement('button');
       button.className = 'work-filter-button';
@@ -185,6 +197,7 @@
     }
 
     function uniqueValues(key) {
+      if (key === 'size') return ['큰', '중간', '작은'];
       return [...new Set(artworks.map((artwork) => artwork[key]))];
     }
 
@@ -206,7 +219,7 @@
         const card = document.createElement('a');
         card.className = 'work-card';
         card.href = `photos/${artwork.id}.webp`;
-        card.dataset.size = artwork.size;
+        card.dataset.size = artwork.sizeGroup;
         card.dataset.material = artwork.material;
         card.dataset.year = artwork.year;
         card.dataset.index = String(index);
