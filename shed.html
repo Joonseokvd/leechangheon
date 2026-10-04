@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-6">
+<link rel="stylesheet" href="style.css?v=20261005-7">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -29,7 +29,7 @@
 
     <section class="work-filter" aria-label="Shed filters">
       <button class="work-filter-toggle" type="button" aria-expanded="true" aria-controls="work-filter-panel">
-        <span class="en">Filter</span><span class="work-filter-count" id="work-filter-count"></span>
+        <span>선반</span><span class="work-filter-count" id="work-filter-count"></span>
       </button>
       <div class="work-filter-panel" id="work-filter-panel">
         <div class="work-filter-group" data-filter-group="size">
@@ -239,8 +239,19 @@
         .replace(/\(/g, '<span class="open-paren">(</span>');
     }
 
-    function formatCaption(text) {
-      return text.split(' │ ').map((part) => formatText(part)).join('<br>');
+    function formatCaption(text, separator = '<br>') {
+      const parts = text.split(' │ ');
+      const titleCount = Math.max(1, parts.length - 3);
+
+      return parts.map((part, index) => {
+        const prefix = index === 0 ? '↗ ' : '';
+        const formatted = formatText(`${prefix}${part}`);
+
+        if (index >= titleCount) return formatted;
+
+        const languageClass = /[가-힣]/.test(part) ? 'caption-title-ko' : 'caption-title-en';
+        return `<span class="caption-title ${languageClass}">${formatted}</span>`;
+      }).join(separator);
     }
 
     function getSizeGroup(size) {
@@ -361,7 +372,7 @@
       const artwork = artworks[current];
       lightboxImg.src = `photos/${artwork.id}.webp`;
       lightboxImg.alt = artwork.caption;
-      lightboxCaption.innerHTML = formatText(artwork.caption);
+      lightboxCaption.innerHTML = formatCaption(artwork.caption, ' │ ');
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
