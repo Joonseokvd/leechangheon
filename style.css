@@ -71,7 +71,7 @@ header h1 {
   width: 100%;
   margin: 0;
   padding: 0;
-  color: #fff;
+  color: #000;
   font-size: 15pt;
   font-weight: 400;
   line-height: 1;
@@ -81,7 +81,7 @@ header h1 {
 }
 
 header h1.over-bright-bg {
-  color: var(--muted);
+  color: #000;
 }
 
 header h1 button {
@@ -166,7 +166,7 @@ footer {
   height: auto;
   margin: 0;
   padding: 0;
-  color: var(--muted);
+  color: #000;
   font-size: 0.8rem;
   line-height: 1;
   transition: color 0.2s ease;
@@ -174,7 +174,7 @@ footer {
 }
 
 footer.over-gallery {
-  color: #fff;
+  color: #000;
 }
 
 footer a {
@@ -219,7 +219,7 @@ footer a {
   left: 24px;
   margin: 0;
   padding: 0;
-  color: var(--muted);
+  color: #000;
   font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.35;
