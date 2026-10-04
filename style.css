@@ -393,7 +393,7 @@ body.shed-page {
 body.shed-page .work-caption {
   position: static;
   display: block;
-  width: 33.333%;
+  width: 100%;
   margin: 8px auto 0;
   overflow: visible;
   opacity: 1;
@@ -403,7 +403,7 @@ body.shed-page .work-caption {
 }
 
 body.shed-page .work-card img {
-  width: 33.333%;
+  width: 50%;
   margin: 0 auto;
 }
 
