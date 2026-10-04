@@ -312,12 +312,4 @@ footer a {
       opacity 0.5s ease;
   }
 
-  body.effects-disabled .grid figure,
-  body.effects-disabled .grid figure:hover {
-    filter: none;
-    transform: none;
-    mix-blend-mode: normal;
-    opacity: 1;
-    transition: none;
-  }
 }
