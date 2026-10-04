@@ -248,6 +248,26 @@ body.shed-page {
   margin-bottom: 0;
 }
 
+.typewrite {
+  min-height: 4.2em;
+}
+
+.typewrite.is-typing::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  border-right: 1px solid currentColor;
+  transform: translateY(0.12em);
+  animation: type-cursor 0.8s steps(1) infinite;
+}
+
+@keyframes type-cursor {
+  50% {
+    opacity: 0;
+  }
+}
+
 .shed-intro a {
   color: inherit;
   text-decoration: none;
