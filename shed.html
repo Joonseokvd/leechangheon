@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261005-1">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -12,7 +12,7 @@
     <h1><a href="index.html">이창 <span class="en">Lee Chang</span></a></h1>
   </header>
 
-  <main class="shed">
+  <main class="work shed">
     <section class="work-filter" aria-label="Shed filters">
       <button class="work-filter-toggle" type="button" aria-expanded="true" aria-controls="work-filter-panel">
         꼭지 <span class="en">Filter</span><span class="work-filter-count" id="work-filter-count"></span>
@@ -34,7 +34,7 @@
       </div>
     </section>
 
-    <section class="shed-grid" id="shed-grid" aria-label="All works"></section>
+    <section class="work-grid" id="shed-grid" aria-label="All works"></section>
   </main>
 
   <footer>
@@ -196,14 +196,14 @@
     function renderGrid() {
       artworks.forEach((artwork) => {
         const card = document.createElement('a');
-        card.className = 'shed-card';
+        card.className = 'work-card';
         card.href = `photos/${artwork.id}.webp`;
         card.dataset.size = artwork.size;
         card.dataset.material = artwork.material;
         card.dataset.year = artwork.year;
         card.innerHTML = `
           <img src="photos/${artwork.id}.webp" alt="${escapeHtml(artwork.caption)}" loading="lazy" decoding="async">
-          <span class="shed-caption">${formatText(artwork.caption)}</span>
+          <span class="work-caption">${formatText(artwork.caption)}</span>
         `;
         grid.appendChild(card);
       });
@@ -217,7 +217,7 @@
 
     function applyFilters() {
       let visible = 0;
-      grid.querySelectorAll('.shed-card').forEach((card) => {
+      grid.querySelectorAll('.work-card').forEach((card) => {
         const isVisible = matchesFilters(card);
         card.hidden = !isVisible;
         if (isVisible) visible++;
