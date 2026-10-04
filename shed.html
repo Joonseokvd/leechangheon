@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-3">
+<link rel="stylesheet" href="style.css?v=20261005-4">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -304,7 +304,7 @@
       const artwork = artworks[current];
       lightboxImg.src = `photos/${artwork.id}.webp`;
       lightboxImg.alt = artwork.caption;
-      lightboxCaption.innerHTML = formatCaption(artwork.caption);
+      lightboxCaption.innerHTML = formatText(artwork.caption);
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
