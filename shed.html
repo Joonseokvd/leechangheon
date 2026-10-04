@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-4">
+<link rel="stylesheet" href="style.css?v=20261005-5">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -16,17 +16,11 @@
     <section class="shed-intro" aria-label="artist introduction">
       <p>이창헌 <span class="en">Changheon Lee</span></p>
 
-      <p>부산 출생.<br>
-      ‘그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가.’<br>
-      이 문장을 가끔 되새기며 그림을 그립니다.</p>
+      <p class="typewrite" id="intro-ko" aria-label="부산 출생. ‘그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가.’ 이 문장을 가끔 되새기며 그림을 그립니다."></p>
 
-      <p><span class="en">Born in Busan, South Korea.<br>
-      “He wanted to live a completely different life. Don't I have that right as well?”<br>
-      He remembers this sentence sometimes. And he paints.</span></p>
+      <p class="en typewrite" id="intro-en" aria-label="Born in Busan, South Korea. He wanted to live a completely different life. Don't I have that right as well? He remembers this sentence sometimes. And he paints."></p>
 
-      <p><span class="en">Geboren in Busan, Südkorea.<br>
-      „Er wollte ein völlig anderes Leben führen. Habe ich nicht auch ein Recht darauf?“<br>
-      Manchmal erinnert er sich an diesen Satz. Und er malt.</span></p>
+      <p class="en typewrite" id="intro-de" aria-label="Geboren in Busan, Südkorea. Er wollte ein völlig anderes Leben führen. Habe ich nicht auch ein Recht darauf? Manchmal erinnert er sich an diesen Satz. Und er malt."></p>
 
       <p><a href="mailto:lee.changlegs@gmail.com"><span class="en">lee.changlegs@gmail.com</span></a><br>
       <a href="https://www.instagram.com/lee.changlegs/" target="_blank" rel="noopener"><span class="en">@lee.changlegs</span></a><br>
@@ -64,6 +58,69 @@
   </div>
 
   <script>
+    const introTexts = [
+      {
+        id: 'intro-ko',
+        lines: [
+          '부산 출생.',
+          '‘그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가.’',
+          '이 문장을 가끔 되새기며 그림을 그립니다.'
+        ]
+      },
+      {
+        id: 'intro-en',
+        lines: [
+          'Born in Busan, South Korea.',
+          "“He wanted to live a completely different life. Don't I have that right as well?”",
+          'He remembers this sentence sometimes. And he paints.'
+        ]
+      },
+      {
+        id: 'intro-de',
+        lines: [
+          'Geboren in Busan, Südkorea.',
+          '„Er wollte ein völlig anderes Leben führen. Habe ich nicht auch ein Recht darauf?“',
+          'Manchmal erinnert er sich an diesen Satz. Und er malt.'
+        ]
+      }
+    ];
+
+    function typeIntro({ id, lines }) {
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      target.textContent = '';
+      target.classList.add('is-typing');
+
+      let lineIndex = 0;
+      let charIndex = 0;
+      let currentLine = document.createTextNode('');
+      target.appendChild(currentLine);
+
+      const timer = window.setInterval(() => {
+        currentLine.textContent += lines[lineIndex][charIndex];
+        charIndex++;
+
+        if (charIndex < lines[lineIndex].length) return;
+
+        lineIndex++;
+        charIndex = 0;
+
+        if (lineIndex >= lines.length) {
+          window.clearInterval(timer);
+          target.classList.remove('is-typing');
+          target.classList.add('is-complete');
+          return;
+        }
+
+        target.appendChild(document.createElement('br'));
+        currentLine = document.createTextNode('');
+        target.appendChild(currentLine);
+      }, 28);
+    }
+
+    introTexts.forEach(typeIntro);
+
     const rawArtworks = `
 1|멀리서 들리는 소리들 │ Sounds Heard from Afar │ 2024—2025 │ oil on canvas │ 100×80(cm)
 2|노란 진심에게 짙은 나무가 │ from Dark Trees to Yellow Sincerity │ 2024—2025 │ oil on canvas │ 100×73(cm)
