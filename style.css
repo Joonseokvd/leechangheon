@@ -371,13 +371,20 @@ body.shed-page {
 }
 
 body.shed-page .work-caption {
+  position: static;
+  display: block;
+  width: 33.333%;
+  margin: 8px auto 0;
   overflow: visible;
+  opacity: 1;
+  pointer-events: auto;
   text-overflow: clip;
   white-space: normal;
 }
 
-body.shed-page .lightbox-caption {
-  line-height: 1.45;
+body.shed-page .work-card img {
+  width: 33.333%;
+  margin: 0 auto;
 }
 
 @media (max-width: 1200px) {
