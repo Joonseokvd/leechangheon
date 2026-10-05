@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-04">
+<link rel="stylesheet" href="style.css?v=20261006-05">
 </head>
 <body>
   <header>
@@ -195,6 +195,12 @@
       img.loading = mobileQuery.matches && !isIntro ? 'lazy' : 'eager';
       img.decoding = 'async';
       img.addEventListener('load', scheduleLayout);
+      img.addEventListener('error', () => {
+        if (img.getAttribute('src') !== src) {
+          img.src = src;
+        }
+        scheduleLayout();
+      }, { once: true });
       figure.appendChild(img);
       figure.addEventListener('click', () => openLightbox(index));
       grid.appendChild(figure);
@@ -218,9 +224,12 @@
       scheduleLayout();
 
       const remainingPhotos = photos.slice(MOBILE_INITIAL_COUNT);
-      await Promise.allSettled(
-        remainingPhotos.map((src) => preloadImage(getDisplaySrc(src)))
-      );
+      await Promise.race([
+        Promise.allSettled(
+          remainingPhotos.map((src) => preloadImage(getDisplaySrc(src)))
+        ),
+        delay(1200)
+      ]);
 
       document.body.classList.add('mobile-reveal');
       remainingPhotos.forEach((src, offset) => {
