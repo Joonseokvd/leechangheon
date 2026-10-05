@@ -562,6 +562,16 @@ body.shed-page .work-card img {
     text-align: center;
   }
 
+  body:not(.shed-page) footer {
+    gap: 0;
+    font-size: 15pt;
+    line-height: 1.8;
+  }
+
+  body:not(.shed-page) .footer-shed {
+    order: -1;
+  }
+
   body.shed-page {
     padding-top: 58px;
     font-size: 15px;
