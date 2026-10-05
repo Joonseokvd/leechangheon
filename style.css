@@ -137,8 +137,7 @@ header h1 a {
 }
 
 body:not(.shed-page) header h1:hover,
-body:not(.shed-page) header h1:focus-within,
-body:not(.shed-page) .lightbox-caption:hover {
+body:not(.shed-page) header h1:focus-within {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -503,15 +502,11 @@ body.shed-page .work-card img {
   left: 24px;
   margin: 0;
   padding: 0;
-  color: var(--main-fg);
+  color: var(--fg);
   font-size: 0.8rem;
   font-weight: 400;
   line-height: 1.35;
   text-align: center;
-}
-
-body.shed-page .lightbox-caption {
-  color: var(--fg);
 }
 
 .lightbox .close {
