@@ -116,6 +116,18 @@ header h1 a {
   text-decoration: none;
 }
 
+body:not(.shed-page) header h1:hover,
+body:not(.shed-page) header h1:focus-within,
+body:not(.shed-page) footer:hover,
+body:not(.shed-page) footer:focus-within,
+body:not(.shed-page) .lightbox-caption:hover {
+  color: #cccccc;
+}
+
+body.shed-page header h1 {
+  color: #333333;
+}
+
 
 .grid {
   position: relative;
