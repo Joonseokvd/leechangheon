@@ -138,7 +138,7 @@ header h1 a {
   stroke-linecap: butt;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
-  stroke-dasharray: var(--edge-scroll-thumb, 0.12) calc(2 - var(--edge-scroll-thumb, 0.12));
+  stroke-dasharray: var(--edge-scroll-thumb, 0.12) 999;
   stroke-dashoffset: var(--edge-scroll-offset, 0);
   transition: stroke-dashoffset 0.08s linear;
 }
