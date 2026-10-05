@@ -274,9 +274,10 @@ body.shed-page {
 
 .shed-intro {
   max-width: 640px;
-  margin: 0 0 36px;
+  margin: 0 auto 36px;
   font-size: inherit;
   line-height: 1.4;
+  text-align: center;
   word-break: keep-all;
 }
 
@@ -323,6 +324,7 @@ body.shed-page {
   margin-bottom: 18px;
   font-size: inherit;
   line-height: 1.4;
+  text-align: center;
 }
 
 .work-filter-toggle,
@@ -352,6 +354,7 @@ body.shed-page {
   display: grid;
   gap: 6px;
   margin-top: 8px;
+  justify-items: center;
 }
 
 .work-filter-panel[hidden] {
@@ -359,8 +362,9 @@ body.shed-page {
 }
 
 .work-filter-group {
-  display: grid;
-  grid-template-columns: 74px minmax(0, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -371,12 +375,12 @@ body.shed-page {
 .work-filter-options {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0 14px;
 }
 
 .work-filter-clear {
-  justify-self: start;
-  margin-left: 86px;
+  justify-self: center;
 }
 
 .work-filter-count {
@@ -579,7 +583,6 @@ body.shed-page .lightbox-caption {
   }
 
   .work-filter-group {
-    grid-template-columns: 58px minmax(0, 1fr);
     gap: 8px;
   }
 
@@ -587,9 +590,6 @@ body.shed-page .lightbox-caption {
     gap: 0 10px;
   }
 
-  .work-filter-clear {
-    margin-left: 66px;
-  }
 
   .grid figure:hover {
     z-index: auto;
