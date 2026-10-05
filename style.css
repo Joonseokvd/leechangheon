@@ -174,22 +174,7 @@ header h1 a {
   mix-blend-mode: multiply;
   opacity: 0.94;
   transition: filter 1s ease, transform 1s ease, opacity 1s ease;
-  cursor: pointer;
-}
-
-.grid figure::after {
-  content: "👁️";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  color: var(--main-fg);
-  font-size: 1.2rem;
-  line-height: 1;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.2s ease;
+  cursor: zoom-in;
 }
 
 .grid img {
@@ -207,9 +192,6 @@ header h1 a {
   opacity: 1;
 }
 
-.grid figure:hover::after {
-  opacity: 1;
-}
 
 footer {
   position: fixed;
