@@ -25,6 +25,22 @@
     window.addEventListener('resize', window.updateEdgeScrollbar);
     window.addEventListener('load', window.updateEdgeScrollbar);
     window.updateEdgeScrollbar();
+    let edgeScrollState = '';
+    function watchEdgeScrollbar() {
+      const root = document.documentElement;
+      const nextState = [
+        window.scrollY,
+        window.innerWidth,
+        window.innerHeight,
+        root.scrollHeight
+      ].join(':');
+      if (nextState !== edgeScrollState) {
+        edgeScrollState = nextState;
+        window.updateEdgeScrollbar();
+      }
+      window.requestAnimationFrame(watchEdgeScrollbar);
+    }
+    window.requestAnimationFrame(watchEdgeScrollbar);
   </script>
 
   <header>
