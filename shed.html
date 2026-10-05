@@ -29,22 +29,22 @@
 
     <section class="work-filter" aria-label="Shed filters">
       <button class="work-filter-toggle" type="button" aria-expanded="true" aria-controls="work-filter-panel">
-        <span>선반</span><span class="work-filter-count" id="work-filter-count"></span>
+        <span>선반 Shelf</span><span class="work-filter-count" id="work-filter-count"></span>
       </button>
       <div class="work-filter-panel" id="work-filter-panel">
         <div class="work-filter-group" data-filter-group="size">
-          <span class="work-filter-label">크기</span>
+          <span class="work-filter-label">크기 Size</span>
           <div class="work-filter-options" id="size-options"></div>
         </div>
         <div class="work-filter-group" data-filter-group="material">
-          <span class="work-filter-label">소재</span>
+          <span class="work-filter-label">소재 Material</span>
           <div class="work-filter-options" id="material-options"></div>
         </div>
         <div class="work-filter-group" data-filter-group="year">
-          <span class="work-filter-label">년도</span>
+          <span class="work-filter-label">년도 Year</span>
           <div class="work-filter-options" id="year-options"></div>
         </div>
-        <button class="work-filter-clear" type="button" id="work-filter-clear">초기화</button>
+        <button class="work-filter-clear" type="button" id="work-filter-clear">초기화 Reset</button>
       </div>
     </section>
 
@@ -290,6 +290,14 @@
     function getFilterLabel(group, value) {
       if (group === 'year') return `${getYearStart(value)}—`;
       if (group === 'material') return getMaterialLabel(value);
+      if (group === 'size') {
+        const labels = {
+          '큰': '큰 Big',
+          '중간': '중간 Hm',
+          '작은': '작은 small'
+        };
+        return labels[value] || value;
+      }
       return value;
     }
 
