@@ -345,14 +345,13 @@ body.shed-page {
 
 .work-filter-group {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 12px;
 }
 
 .work-filter-label {
-  color: var(--fg);
+  color: #cccccc;
 }
 
 .work-filter-options {
