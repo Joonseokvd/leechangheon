@@ -345,6 +345,10 @@ body.shed-page {
   cursor: pointer;
 }
 
+.work-filter-toggle {
+  color: #888888;
+}
+
 .work-filter-toggle:hover,
 .work-filter-toggle:focus-visible,
 .work-filter-button:hover,
