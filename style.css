@@ -29,10 +29,10 @@
 
 :root {
   --bg: #fff;
-  --accent: #33FF66;
-  --fg: #33FF66;
-  --main-fg: #333333;
-  --muted: #333333;
+  --accent: #cccccc;
+  --fg: #cccccc;
+  --main-fg: #cccccc;
+  --muted: #cccccc;
 }
 
 * {
@@ -360,7 +360,7 @@ body.shed-page {
 }
 
 .work-filter-label {
-  color: #cccccc;
+  color: #333333;
 }
 
 .work-filter-options {
