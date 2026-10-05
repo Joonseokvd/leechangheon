@@ -140,7 +140,8 @@ header h1 a {
 body:not(.shed-page) header h1:hover,
 body:not(.shed-page) header h1:focus-within,
 body:not(.shed-page) .lightbox-caption:hover {
-  color: #cccccc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 body.shed-page header h1 {
@@ -239,13 +240,14 @@ footer a {
 
 body:not(.shed-page) footer a,
 body:not(.shed-page) .footer-copyright {
-  transition: color 0.2s ease;
+  transition: text-decoration-color 0.2s ease;
 }
 
 body:not(.shed-page) footer a:hover,
 body:not(.shed-page) footer a:focus-visible,
 body:not(.shed-page) .footer-copyright:hover {
-  color: #cccccc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .footer-mail {
