@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-02">
+<link rel="stylesheet" href="style.css?v=20261006-03">
 </head>
 <body>
   <header>
@@ -38,6 +38,11 @@
     const sampleCanvas = document.createElement('canvas');
     const sampleContext = sampleCanvas.getContext('2d', { willReadFrequently: true });
     let current = 0;
+    const mobileQuery = window.matchMedia(
+      '(max-width: 768px) and (hover: none), ' +
+      '(max-width: 768px) and (pointer: coarse)'
+    );
+    const MOBILE_INITIAL_COUNT = 3;
 
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -174,18 +179,68 @@
     }
 
 
-    photos.forEach((src, index) => {
+    function getDisplaySrc(src) {
+      return mobileQuery.matches
+        ? src.replace('photos/', 'photos/mobile/')
+        : src;
+    }
+
+    function createFigure(src, index, isIntro = false) {
       const figure = document.createElement('figure');
       const img = document.createElement('img');
       figure.dataset.layoutRandom = Math.random();
-      img.src = src;
+      if (isIntro) figure.classList.add('mobile-intro');
+      img.src = getDisplaySrc(src);
       img.alt = `photo ${src.match(/\d+/)[0]}`;
-      img.loading = 'eager';
+      img.loading = mobileQuery.matches && !isIntro ? 'lazy' : 'eager';
+      img.decoding = 'async';
       img.addEventListener('load', scheduleLayout);
       figure.appendChild(img);
       figure.addEventListener('click', () => openLightbox(index));
       grid.appendChild(figure);
-    });
+    }
+
+    function preloadImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve;
+        img.src = src;
+      });
+    }
+
+    async function renderMobileGallery() {
+      document.body.classList.add('mobile-loading');
+
+      photos.slice(0, MOBILE_INITIAL_COUNT).forEach((src, index) => {
+        createFigure(src, index, true);
+      });
+      scheduleLayout();
+
+      const remainingPhotos = photos.slice(MOBILE_INITIAL_COUNT);
+      await Promise.allSettled(
+        remainingPhotos.map((src) => preloadImage(getDisplaySrc(src)))
+      );
+
+      document.body.classList.add('mobile-reveal');
+      remainingPhotos.forEach((src, offset) => {
+        createFigure(src, offset + MOBILE_INITIAL_COUNT);
+      });
+      grid.querySelectorAll('.mobile-intro').forEach((figure) => {
+        figure.classList.remove('mobile-intro');
+      });
+      scheduleLayout();
+
+      await delay(350);
+      document.body.classList.remove('mobile-loading');
+      document.body.classList.remove('mobile-reveal');
+    }
+
+    if (mobileQuery.matches) {
+      renderMobileGallery();
+    } else {
+      photos.forEach((src, index) => createFigure(src, index));
+    }
 
     let layoutFrame;
 
@@ -329,62 +384,13 @@
       updateTitleColor();
     }
 
-    const mobileQuery = window.matchMedia(
-      '(max-width: 768px) and (hover: none), ' +
-      '(max-width: 768px) and (pointer: coarse)'
-    );
-
     function delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    function getVisibleFigures(excludedFigure) {
-      return [...grid.querySelectorAll('figure')].filter((figure) => {
-        const rect = figure.getBoundingClientRect();
-        return figure !== excludedFigure &&
-          rect.bottom > 0 &&
-          rect.top < window.innerHeight &&
-          rect.right > 0 &&
-          rect.left < window.innerWidth;
-      });
-    }
-
-    async function runMobileSequence() {
-      if (!mobileQuery.matches) return;
-
-      document.body.classList.add('mobile-sequence');
-      let activeFigure = null;
-
-      for (let round = 0; round < 3; round++) {
-        let candidates = getVisibleFigures(activeFigure);
-
-        while (!candidates.length) {
-          await delay(200);
-          candidates = getVisibleFigures(activeFigure);
-        }
-
-        const nextFigure =
-          candidates[Math.floor(Math.random() * candidates.length)];
-
-        nextFigure.classList.add('mobile-clear');
-        if (activeFigure) activeFigure.classList.remove('mobile-clear');
-        activeFigure = nextFigure;
-
-        await delay(1500);
-      }
-
-      document.body.classList.add('mobile-complete');
-      document.body.classList.remove('mobile-sequence');
-      if (activeFigure) activeFigure.classList.remove('mobile-clear');
-
-      await delay(1500);
-      document.body.classList.remove('mobile-complete');
     }
 
     window.addEventListener('load', () => {
       window.scrollTo(0, 0);
       scheduleLayout();
-      setTimeout(runMobileSequence, 100);
     });
     window.addEventListener('resize', scheduleLayout);
     window.addEventListener('scroll', updateInterfaceColors, { passive: true });
