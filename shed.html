@@ -214,7 +214,7 @@
         id: Number(id),
         caption,
         year: parts[parts.length - 3],
-        material: parts[parts.length - 2],
+        material: getMaterialGroup(parts[parts.length - 2]),
         size,
         sizeGroup: getSizeGroup(size)
       };
@@ -262,6 +262,11 @@
       if (area > 4380) return '큰';
       if (area > 1000) return '중간';
       return '작은';
+    }
+
+    function getMaterialGroup(material) {
+      const medium = material.toLowerCase().split(/\s+on\s+/)[0].trim();
+      return medium.charAt(0).toUpperCase() + medium.slice(1);
     }
 
     function getYearStart(year) {
