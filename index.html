@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
-<link rel="stylesheet" href="style.css?v=20261005-26">
+<link rel="stylesheet" href="style.css?v=20261005-27">
 </head>
 <body>
   <header>
@@ -131,14 +131,27 @@
     }
 
     function formatEnglishText(text) {
-      const escaped = escapeHtml(text);
-      return escaped
+      return escapeHtml(text)
         .replace(
           /[A-Za-z0-9][A-Za-z0-9\s.,'’:&()/]*/g,
           '<span class="en">$&</span>'
         )
         .replace(/[—×]/g, '<span class="symbol">$&</span>')
         .replace(/\(/g, '<span class="open-paren">(</span>');
+    }
+
+    function formatCaption(text, separator = ' │ ') {
+      const parts = text.split(' │ ');
+      const titleCount = Math.max(1, parts.length - 3);
+
+      return parts.map((part, index) => {
+        const formatted = formatEnglishText(part);
+
+        if (index >= titleCount) return formatted;
+
+        const languageClass = /[가-힣]/.test(part) ? 'caption-title-ko' : 'caption-title-en';
+        return `<span class="caption-title ${languageClass}">${formatted}</span>`;
+      }).join(separator);
     }
 
     const paleCandidates = [58, 59, 62, 63, 64, 65, 66, 67, 68, 69];
@@ -393,7 +406,7 @@
       const src = photos[current];
       const photoNumber = Number(src.match(/\d+/)[0]);
       lightboxImg.src = src;
-      lightboxCaption.innerHTML = formatEnglishText(captions[photoNumber] || "");
+      lightboxCaption.innerHTML = formatCaption(captions[photoNumber] || "");
     }
 
     lightbox.querySelector('.close').addEventListener('click', closeLightbox);
