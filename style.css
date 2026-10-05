@@ -402,15 +402,6 @@ body.shed-page .work-caption {
   white-space: normal;
 }
 
-body.shed-page .caption-title {
-  font-weight: 800;
-}
-
-body.shed-page .caption-title .en,
-body.shed-page .caption-title-en {
-  font-weight: 700;
-}
-
 body.shed-page .work-card img {
   width: 50%;
   margin: 0 auto;
