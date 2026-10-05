@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-29">
+<link rel="stylesheet" href="style.css?v=20261006-02">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -258,7 +258,9 @@
       const dimensions = size.match(/(\d+)×(\d+)/);
       if (!dimensions) return '중간';
 
-      const area = Number(dimensions[1]) * Number(dimensions[2]);
+      const unitMatch = size.match(/\((mm|cm)\)/i);
+      const scale = unitMatch && unitMatch[1].toLowerCase() === 'mm' ? 0.1 : 1;
+      const area = Number(dimensions[1]) * scale * Number(dimensions[2]) * scale;
       if (area > 4380) return '큰';
       if (area > 1000) return '중간';
       return '작은';
@@ -290,9 +292,9 @@
       if (group === 'material') return getMaterialLabel(value);
       if (group === 'size') {
         const labels = {
-          '큰': '큰 Big',
-          '중간': '중간 Hm',
-          '작은': '작은 Small'
+          '큰': '큰 L',
+          '중간': '중간 M',
+          '작은': '작은 S'
         };
         return labels[value] || value;
       }
