@@ -47,25 +47,13 @@ body {
   color: var(--main-fg);
   font-family: "Pretendard", sans-serif;
   font-weight: 400;
-  scrollbar-color: var(--accent) transparent;
+  scrollbar-width: none;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border: 3px solid var(--bg);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .en {
@@ -151,13 +139,8 @@ header h1 a {
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
   stroke-dasharray: 0.12 0.88;
-  animation: edge-scroll-loop 5s linear 1 forwards;
-}
-
-@keyframes edge-scroll-loop {
-  to {
-    stroke-dashoffset: -2;
-  }
+  stroke-dashoffset: var(--edge-scroll-offset, 0);
+  transition: stroke-dashoffset 0.08s linear;
 }
 
 .grid {
