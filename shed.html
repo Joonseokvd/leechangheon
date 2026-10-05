@@ -4,17 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-13">
+<link rel="stylesheet" href="style.css?v=20261005-14">
 </head>
 <body class="shed-page">
   <svg class="edge-scroll" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M50 99.5 H99.5 V0.5 H0.5 V99.5 H50" pathLength="1"></path>
+    <path class="edge-scroll-thumb" d="M50 99.5 H99.5 V0.5 H0.5 V99.5 H50 H99.5 V0.5 H0.5 V99.5 H50" pathLength="2"></path>
   </svg>
   <script>
     window.updateEdgeScrollbar = function updateEdgeScrollbar() {
       const root = document.documentElement;
-      const max = Math.max(1, root.scrollHeight - window.innerHeight);
+      const scrollHeight = Math.max(window.innerHeight, root.scrollHeight);
+      const max = Math.max(1, scrollHeight - window.innerHeight);
       const progress = Math.min(1, Math.max(0, window.scrollY / max));
+      const thumb = Math.min(0.5, Math.max(0.035, window.innerHeight / scrollHeight));
+      root.style.setProperty('--edge-scroll-thumb', String(thumb));
       root.style.setProperty('--edge-scroll-offset', String(progress * -2));
     };
     window.addEventListener('scroll', window.updateEdgeScrollbar, { passive: true });
