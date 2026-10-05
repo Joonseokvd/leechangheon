@@ -375,7 +375,7 @@ body.shed-page {
 }
 
 .work-filter-label {
-  color: #eeeeee;
+  color: #888888;
 }
 
 .work-filter-options {
@@ -387,7 +387,7 @@ body.shed-page {
 
 .work-filter-clear {
   justify-self: center;
-  color: #eeeeee;
+  color: #888888;
 }
 
 .work-filter-count {
