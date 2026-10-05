@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헛간 Shed</title>
-<link rel="stylesheet" href="style.css?v=20261005-10">
+<link rel="stylesheet" href="style.css?v=20261005-11">
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
@@ -269,6 +269,17 @@
       return medium.charAt(0).toUpperCase() + medium.slice(1);
     }
 
+    function getMaterialLabel(material) {
+      const labels = {
+        Oil: '유화 Oil',
+        'Mixed media': '혼합재료 Mixed media',
+        Watercolors: '수채 Watercolors',
+        Pen: '펜 Pen',
+        Book: '책 Book'
+      };
+      return labels[material] || material;
+    }
+
     function getYearStart(year) {
       const match = year.match(/\d{4}/);
       return match ? Number(match[0]) : 0;
@@ -276,6 +287,7 @@
 
     function getFilterLabel(group, value) {
       if (group === 'year') return `${getYearStart(value)}—`;
+      if (group === 'material') return getMaterialLabel(value);
       return value;
     }
 
@@ -301,6 +313,11 @@
 
     function uniqueValues(key) {
       if (key === 'size') return ['큰', '중간', '작은'];
+      if (key === 'material') {
+        const order = ['Oil', 'Mixed media', 'Watercolors', 'Pen', 'Book'];
+        const values = new Set(artworks.map((artwork) => artwork[key]));
+        return order.filter((value) => value === 'Book' || values.has(value));
+      }
       const values = [...new Set(artworks.map((artwork) => artwork[key]))];
       if (key === 'year') {
         return values.sort((a, b) => getYearStart(b) - getYearStart(a));
