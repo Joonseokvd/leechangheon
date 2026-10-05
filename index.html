@@ -13,9 +13,12 @@
   <script>
     window.updateEdgeScrollbar = function updateEdgeScrollbar() {
       const root = document.documentElement;
-      const scrollHeight = Math.max(window.innerHeight, root.scrollHeight);
+      const scroller = document.scrollingElement || root;
+      const scrollTop = window.pageYOffset || scroller.scrollTop || root.scrollTop || 0;
+      const bodyHeight = document.body ? document.body.scrollHeight : 0;
+      const scrollHeight = Math.max(window.innerHeight, scroller.scrollHeight, bodyHeight);
       const max = Math.max(1, scrollHeight - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, window.scrollY / max));
+      const progress = Math.min(1, Math.max(0, scrollTop / max));
       const perimeter = (window.innerWidth * 2) + (window.innerHeight * 2);
       const thumb = Math.min(0.95, Math.max(0.01, (window.innerWidth * 0.25) / perimeter));
       root.style.setProperty('--edge-scroll-thumb', String(thumb));
@@ -28,11 +31,15 @@
     let edgeScrollState = '';
     function watchEdgeScrollbar() {
       const root = document.documentElement;
+      const scroller = document.scrollingElement || root;
+      const scrollTop = window.pageYOffset || scroller.scrollTop || root.scrollTop || 0;
+      const bodyHeight = document.body ? document.body.scrollHeight : 0;
       const nextState = [
-        window.scrollY,
+        scrollTop,
         window.innerWidth,
         window.innerHeight,
-        root.scrollHeight
+        scroller.scrollHeight,
+        bodyHeight
       ].join(':');
       if (nextState !== edgeScrollState) {
         edgeScrollState = nextState;
