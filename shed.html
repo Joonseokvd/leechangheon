@@ -264,13 +264,23 @@
       return '작은';
     }
 
+    function getYearStart(year) {
+      const match = year.match(/\d{4}/);
+      return match ? Number(match[0]) : 0;
+    }
+
+    function getFilterLabel(group, value) {
+      if (group === 'year') return `${getYearStart(value)}—`;
+      return value;
+    }
+
     function createButton(group, value) {
       const button = document.createElement('button');
       button.className = 'work-filter-button';
       button.type = 'button';
       button.dataset.group = group;
       button.dataset.value = value;
-      button.innerHTML = formatText(value);
+      button.innerHTML = formatText(getFilterLabel(group, value));
       button.addEventListener('click', () => {
         if (activeFilters[group].has(value)) {
           activeFilters[group].delete(value);
@@ -286,7 +296,11 @@
 
     function uniqueValues(key) {
       if (key === 'size') return ['큰', '중간', '작은'];
-      return [...new Set(artworks.map((artwork) => artwork[key]))];
+      const values = [...new Set(artworks.map((artwork) => artwork[key]))];
+      if (key === 'year') {
+        return values.sort((a, b) => getYearStart(b) - getYearStart(a));
+      }
+      return values;
     }
 
     function renderFilters() {
