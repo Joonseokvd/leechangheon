@@ -29,10 +29,10 @@
 
 :root {
   --bg: #fff;
-  --accent: #cccccc;
-  --fg: #cccccc;
-  --main-fg: #cccccc;
-  --muted: #cccccc;
+  --accent: #35a576;
+  --fg: #35a576;
+  --main-fg: #333333;
+  --muted: #333333;
 }
 
 * {
@@ -47,14 +47,8 @@ body {
   color: var(--main-fg);
   font-family: "Pretendard", sans-serif;
   font-weight: 400;
-  scrollbar-width: none;
 }
 
-::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
 
 .en {
   font-family: "Google Sans", "Google Sans Text", "Product Sans", Arial, sans-serif;
@@ -122,26 +116,6 @@ header h1 a {
   text-decoration: none;
 }
 
-.edge-scroll {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-}
-
-.edge-scroll-thumb {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.5px;
-  stroke-linecap: butt;
-  stroke-linejoin: miter;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: var(--edge-scroll-thumb, 0.12) 999;
-  stroke-dashoffset: var(--edge-scroll-offset, 0);
-  transition: stroke-dashoffset 0.08s linear;
-}
 
 .grid {
   position: relative;
@@ -360,7 +334,7 @@ body.shed-page {
 }
 
 .work-filter-label {
-  color: #333333;
+  color: #cccccc;
 }
 
 .work-filter-options {
