@@ -131,14 +131,14 @@ header h1 a {
   pointer-events: none;
 }
 
-.edge-scroll path {
+.edge-scroll-thumb {
   fill: none;
   stroke: var(--accent);
   stroke-width: 1.5px;
-  stroke-linecap: square;
+  stroke-linecap: butt;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
-  stroke-dasharray: 0.12 0.88;
+  stroke-dasharray: var(--edge-scroll-thumb, 0.12) calc(2 - var(--edge-scroll-thumb, 0.12));
   stroke-dashoffset: var(--edge-scroll-offset, 0);
   transition: stroke-dashoffset 0.08s linear;
 }
