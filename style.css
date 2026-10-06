@@ -204,45 +204,6 @@ body.shed-page header h1 {
   opacity: 1;
 }
 
-.mobile-landing-copy {
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  color: var(--fg);
-  font-size: 15px;
-  line-height: 1.4;
-  text-align: center;
-  word-break: keep-all;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.mobile-landing-copy[hidden] {
-  display: none;
-}
-
-.mobile-landing-copy p {
-  margin: 0;
-}
-
-.mobile-landing-copy.is-typing p::after {
-  content: "";
-  display: inline-block;
-  width: 0.5em;
-  height: 1em;
-  border-right: 1px solid currentColor;
-  transform: translateY(0.12em);
-  animation: type-cursor 0.8s steps(1) infinite;
-}
-
-.mobile-landing-copy.is-finished {
-  opacity: 0;
-}
-
 @keyframes mobile-focus-pulse {
   0%,
   100% {
