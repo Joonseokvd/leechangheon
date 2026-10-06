@@ -43,6 +43,7 @@
       '(max-width: 768px) and (pointer: coarse)'
     );
     const MOBILE_INITIAL_COUNT = 3;
+    let layoutFrame;
 
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -250,8 +251,6 @@
     } else {
       photos.forEach((src, index) => createFigure(src, index));
     }
-
-    let layoutFrame;
 
     function scheduleLayout() {
       cancelAnimationFrame(layoutFrame);
