@@ -204,29 +204,6 @@ body.shed-page header h1 {
   opacity: 1;
 }
 
-body.mobile-loading .grid figure.mobile-intro-pending {
-  opacity: 0;
-  filter: blur(24px) saturate(1.7) brightness(1.2);
-}
-
-body.mobile-loading .grid figure.mobile-intro-clear,
-body.mobile-reveal .grid figure,
-body.mobile-reveal .grid figure:hover {
-  z-index: 1;
-  filter: blur(0) saturate(1) brightness(1);
-  transform: scale(1);
-  mix-blend-mode: normal;
-  opacity: 1;
-}
-
-body.mobile-loading .grid figure,
-body.mobile-reveal .grid figure {
-  transition:
-    filter 0.5s ease,
-    transform 0.5s ease,
-    opacity 0.5s ease;
-}
-
 footer {
   position: fixed;
   right: 16px;
