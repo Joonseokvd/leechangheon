@@ -611,6 +611,11 @@ body.shed-page .work-card img {
     opacity: 0.94;
   }
 
+  body.mobile-loading .grid figure.mobile-intro-pending {
+    opacity: 0;
+    filter: blur(24px) saturate(1.7) brightness(1.2);
+  }
+
   body.mobile-loading .grid figure.mobile-intro-clear,
   body.mobile-reveal .grid figure,
   body.mobile-reveal .grid figure:hover {
