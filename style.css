@@ -626,29 +626,15 @@ body.shed-page .work-card img {
     gap: 0 10px;
   }
 
-  .grid figure {
-    filter: none;
-    transform: none;
-    mix-blend-mode: multiply;
-    opacity: 0.94;
-    transition: none;
-  }
-
   .grid figure img {
-    filter: blur(24px) saturate(1.7) brightness(1.2);
-    transform: scale(1.06);
-    transform-origin: center;
     transition:
       filter 0.5s ease,
       transform 0.5s ease,
       opacity 0.5s ease;
-    will-change: filter, transform;
   }
 
   .grid figure:hover {
     z-index: auto;
-    filter: none;
-    transform: none;
     mix-blend-mode: multiply;
     opacity: 0.94;
   }
@@ -679,8 +665,6 @@ body.shed-page .work-card img {
   body.mobile-all-clear .grid figure,
   body.mobile-all-clear .grid figure:hover {
     z-index: 1;
-    filter: none;
-    transform: none;
     mix-blend-mode: multiply;
     opacity: 0.94;
   }
