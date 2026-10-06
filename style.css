@@ -611,7 +611,7 @@ body.shed-page .work-card img {
     opacity: 0.94;
   }
 
-  body.mobile-loading .grid figure.mobile-intro,
+  body.mobile-loading .grid figure.mobile-intro-clear,
   body.mobile-reveal .grid figure,
   body.mobile-reveal .grid figure:hover {
     z-index: 1;
