@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-08">
+<link rel="stylesheet" href="style.css?v=20261006-09">
 </head>
 <body>
   <header>
@@ -235,7 +235,7 @@
       ]);
       const revealIntro = introFigures.reduce(
         (promise, figure) => promise.then(async () => {
-          await delay(300);
+          await delay(1000);
           figure.classList.remove('mobile-intro-pending');
           figure.classList.add('mobile-intro-clear');
         }),
@@ -244,6 +244,7 @@
 
       await Promise.all([preloadRemaining, revealIntro]);
 
+      document.body.classList.add('mobile-reveal');
       remainingPhotos.forEach((src, offset) => {
         createFigure(src, offset + MOBILE_INITIAL_COUNT);
       });
@@ -252,7 +253,9 @@
       });
       scheduleLayout();
 
+      await delay(1000);
       document.body.classList.remove('mobile-loading');
+      document.body.classList.remove('mobile-reveal');
     }
 
     if (mobileQuery.matches) {
