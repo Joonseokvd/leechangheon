@@ -204,6 +204,62 @@ body.shed-page header h1 {
   opacity: 1;
 }
 
+.mobile-landing-copy {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+  word-break: keep-all;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-landing-copy[hidden] {
+  display: none;
+}
+
+.mobile-landing-copy p {
+  margin: 0;
+}
+
+.mobile-landing-copy.is-typing p::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  border-right: 1px solid currentColor;
+  transform: translateY(0.12em);
+  animation: type-cursor 0.8s steps(1) infinite;
+}
+
+.mobile-landing-copy.is-finished {
+  opacity: 0;
+}
+
+@keyframes mobile-focus-pulse {
+  0%,
+  100% {
+    filter: blur(24px) saturate(1.7) brightness(1.2);
+    transform: scale(1.06);
+    mix-blend-mode: multiply;
+    opacity: 0.94;
+  }
+
+  50% {
+    filter: blur(0) saturate(1) brightness(1);
+    transform: scale(1);
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+}
+
 footer {
   position: fixed;
   right: 16px;
@@ -609,6 +665,33 @@ body.shed-page .work-card img {
     transform: scale(1.06);
     mix-blend-mode: multiply;
     opacity: 0.94;
+  }
+
+  body.mobile-landing-active .grid {
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  body.mobile-landing-active.mobile-gallery-visible .grid {
+    opacity: 1;
+  }
+
+  .grid figure.mobile-focus-pulse {
+    z-index: 2;
+    animation: mobile-focus-pulse 1s ease-in-out both;
+  }
+
+  body.mobile-all-clear .grid figure,
+  body.mobile-all-clear .grid figure:hover {
+    z-index: 1;
+    filter: blur(0) saturate(1) brightness(1);
+    transform: scale(1);
+    mix-blend-mode: normal;
+    opacity: 1;
+    transition:
+      filter 0.5s ease,
+      transform 0.5s ease,
+      opacity 0.5s ease;
   }
 
 }
