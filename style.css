@@ -180,12 +180,8 @@ body.shed-page header h1 {
   padding: 0;
   border: 0;
   overflow: visible;
-  filter: blur(24px) saturate(1.7) brightness(1.2);
-  transform: scale(1.06);
-  transform-origin: center;
   mix-blend-mode: multiply;
   opacity: 0.94;
-  transition: filter 1s ease, transform 1s ease, opacity 1s ease;
   cursor: zoom-in;
 }
 
@@ -194,13 +190,25 @@ body.shed-page header h1 {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  filter: blur(24px) saturate(1.7) brightness(1.2);
+  transform: scale(1.06);
+  transform-origin: center;
+  transition:
+    filter 1s ease,
+    transform 1s ease,
+    opacity 1s ease;
+  will-change: filter, transform;
 }
 
 .grid figure:hover {
   z-index: 1;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+.grid figure:hover img {
   filter: blur(0) saturate(1) brightness(1);
   transform: scale(1);
-  mix-blend-mode: normal;
   opacity: 1;
 }
 
