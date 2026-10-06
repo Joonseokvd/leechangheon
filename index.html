@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-07">
+<link rel="stylesheet" href="style.css?v=20261006-08">
 </head>
 <body>
   <header>
@@ -42,6 +42,7 @@
       '(max-width: 768px) and (hover: none), ' +
       '(max-width: 768px) and (pointer: coarse)'
     );
+    const MOBILE_INITIAL_COUNT = 3;
     let layoutFrame;
 
     if ('scrollRestoration' in history) {
@@ -185,13 +186,14 @@
         : src;
     }
 
-    function createFigure(src, index) {
+    function createFigure(src, index, isIntro = false) {
       const figure = document.createElement('figure');
       const img = document.createElement('img');
       figure.dataset.layoutRandom = Math.random();
+      if (isIntro) figure.classList.add('mobile-intro', 'mobile-intro-pending');
       img.src = getDisplaySrc(src);
       img.alt = `photo ${src.match(/\d+/)[0]}`;
-      img.loading = mobileQuery.matches ? 'lazy' : 'eager';
+      img.loading = mobileQuery.matches && !isIntro ? 'lazy' : 'eager';
       img.decoding = 'async';
       img.addEventListener('load', scheduleLayout);
       img.addEventListener('error', () => {
@@ -203,9 +205,61 @@
       figure.appendChild(img);
       figure.addEventListener('click', () => openLightbox(index));
       grid.appendChild(figure);
+      return figure;
     }
 
-    photos.forEach((src, index) => createFigure(src, index));
+    function preloadImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve;
+        img.src = src;
+      });
+    }
+
+    async function renderMobileGallery() {
+      document.body.classList.add('mobile-loading');
+
+      const introFigures = [];
+      photos.slice(0, MOBILE_INITIAL_COUNT).forEach((src, index) => {
+        introFigures.push(createFigure(src, index, true));
+      });
+      scheduleLayout();
+
+      const remainingPhotos = photos.slice(MOBILE_INITIAL_COUNT);
+      const preloadRemaining = Promise.race([
+        Promise.allSettled(
+          remainingPhotos.map((src) => preloadImage(getDisplaySrc(src)))
+        ),
+        delay(1200)
+      ]);
+      const revealIntro = introFigures.reduce(
+        (promise, figure) => promise.then(async () => {
+          await delay(300);
+          figure.classList.remove('mobile-intro-pending');
+          figure.classList.add('mobile-intro-clear');
+        }),
+        Promise.resolve()
+      );
+
+      await Promise.all([preloadRemaining, revealIntro]);
+
+      remainingPhotos.forEach((src, offset) => {
+        createFigure(src, offset + MOBILE_INITIAL_COUNT);
+      });
+      grid.querySelectorAll('.mobile-intro').forEach((figure) => {
+        figure.classList.remove('mobile-intro', 'mobile-intro-clear');
+      });
+      scheduleLayout();
+
+      document.body.classList.remove('mobile-loading');
+    }
+
+    if (mobileQuery.matches) {
+      renderMobileGallery();
+    } else {
+      photos.forEach((src, index) => createFigure(src, index));
+    }
 
     function scheduleLayout() {
       cancelAnimationFrame(layoutFrame);
@@ -347,6 +401,9 @@
       updateTitleColor();
     }
 
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
 
     window.addEventListener('load', () => {
       window.scrollTo(0, 0);
