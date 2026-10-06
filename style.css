@@ -611,23 +611,6 @@ body.shed-page .work-card img {
     opacity: 0.94;
   }
 
-  body.mobile-loading .grid figure.mobile-intro-clear,
-  body.mobile-reveal .grid figure,
-  body.mobile-reveal .grid figure:hover {
-    z-index: 1;
-    filter: blur(0) saturate(1) brightness(1);
-    transform: scale(1);
-    mix-blend-mode: normal;
-    opacity: 1;
-  }
-
-  body.mobile-loading .grid figure,
-  body.mobile-reveal .grid figure {
-    transition:
-      filter 0.5s ease,
-      transform 0.5s ease,
-      opacity 0.5s ease;
-  }
 
 }
 
