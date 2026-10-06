@@ -209,15 +209,13 @@ body.shed-page header h1 {
   100% {
     filter: blur(24px) saturate(1.7) brightness(1.2);
     transform: scale(1.06);
-    mix-blend-mode: multiply;
     opacity: 0.94;
   }
 
   50% {
     filter: blur(0) saturate(1) brightness(1);
     transform: scale(1);
-    mix-blend-mode: normal;
-    opacity: 1;
+    opacity: 0.94;
   }
 }
 
@@ -639,6 +637,7 @@ body.shed-page .work-card img {
 
   .grid figure.mobile-focus-pulse {
     z-index: 2;
+    mix-blend-mode: multiply;
     animation: mobile-focus-pulse 1s ease-in-out both;
   }
 
@@ -647,8 +646,8 @@ body.shed-page .work-card img {
     z-index: 1;
     filter: blur(0) saturate(1) brightness(1);
     transform: scale(1);
-    mix-blend-mode: normal;
-    opacity: 1;
+    mix-blend-mode: multiply;
+    opacity: 0.94;
     transition:
       filter 0.5s ease,
       transform 0.5s ease,
