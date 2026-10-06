@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-10">
+<link rel="stylesheet" href="style.css?v=20261006-11">
 </head>
 <body>
   <header>
@@ -194,6 +194,7 @@
       img.src = getDisplaySrc(src);
       img.alt = `photo ${src.match(/\d+/)[0]}`;
       img.loading = mobileQuery.matches && !isIntro ? 'lazy' : 'eager';
+      img.fetchPriority = isIntro ? 'high' : 'auto';
       img.decoding = 'async';
       img.addEventListener('load', scheduleLayout);
       img.addEventListener('error', () => {
@@ -217,6 +218,20 @@
       });
     }
 
+    async function waitForFigureImage(figure) {
+      const img = figure.querySelector('img');
+      if (!img) return;
+      if (!img.complete) {
+        await new Promise((resolve) => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        });
+      }
+      if (img.decode) {
+        await img.decode().catch(() => {});
+      }
+    }
+
     async function renderMobileGallery() {
       document.body.classList.add('mobile-loading');
 
@@ -235,6 +250,7 @@
       ]);
       const revealIntro = (async () => {
         for (const [index, figure] of introFigures.entries()) {
+          await waitForFigureImage(figure);
           if (index > 0) await delay(1000);
           figure.classList.remove('mobile-intro-pending');
           figure.classList.add('mobile-intro-clear');
