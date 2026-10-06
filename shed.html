@@ -25,7 +25,7 @@
 
   <main class="work shed">
     <section class="shed-intro" aria-label="artist introduction">
-      <p class="typewrite" id="intro-ko" aria-label="부산 출생. 「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」 이 문장을 가끔 되새기며 그림을 그립니다."></p>
+      <p class="typewrite" id="intro-ko" aria-label="1992 부산 출생. 「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」 이 문장을 가끔 되새기며 그림을 그립니다."></p>
 
       <p class="en typewrite" id="intro-en" aria-label="Born in Busan, South Korea. He wanted to live a completely different life. Don't I have that right as well? He remembers this sentence sometimes. And he paints."></p>
 
@@ -72,7 +72,7 @@
       {
         id: 'intro-ko',
         lines: [
-          '부산 출생.',
+          '1992 부산 출생.',
           '「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」',
           '이 문장을 가끔 되새기며 그림을 그립니다.'
         ]
@@ -218,158 +218,104 @@
     }
 
     function getYearStart(year) {
-      const match = year.match(/\d{4}/);
-      return match ? Number(match[0]) : 0;
+      return year.split('—')[0].trim();
     }
 
-    function getFilterLabel(group, value) {
-      if (group === 'year') return `${getYearStart(value)}—`;
-      if (group === 'material') return getMaterialLabel(value);
-      if (group === 'size') {
-        const labels = {
-          '큰': '큰 Big',
-          '중간': '중간 Hm',
-          '작은': '작은 Small'
-        };
-        return labels[value] || value;
-      }
-      return value;
-    }
-
-    function createButton(group, value) {
-      const button = document.createElement('button');
-      button.className = 'work-filter-button';
-      button.type = 'button';
-      button.dataset.group = group;
-      button.dataset.value = value;
-      button.innerHTML = formatText(getFilterLabel(group, value));
-      button.addEventListener('click', () => {
-        if (activeFilters[group].has(value)) {
-          activeFilters[group].delete(value);
-          button.classList.remove('is-active');
-        } else {
-          activeFilters[group].add(value);
-          button.classList.add('is-active');
-        }
-        applyFilters();
-      });
-      return button;
-    }
-
-    function uniqueValues(key) {
-      if (key === 'size') return ['큰', '중간', '작은'];
-      if (key === 'material') {
-        const order = ['Oil', 'Mixed media', 'Watercolors', 'Pen', 'Book'];
-        const values = new Set(artworks.map((artwork) => artwork[key]));
-        return order.filter((value) => value === 'Book' || values.has(value));
-      }
-      const values = [...new Set(artworks.map((artwork) => artwork[key]))];
-      if (key === 'year') {
-        return values.sort((a, b) => getYearStart(b) - getYearStart(a));
-      }
-      return values;
+    function createFilterButtons(id, values, group, label = (value) => value) {
+      const target = document.getElementById(id);
+      target.innerHTML = values.map(value => `<button type="button" data-group="${group}" data-value="${escapeHtml(value)}">${formatText(label(value))}</button>`).join('');
     }
 
     function renderFilters() {
-      [
-        ['size', 'size-options'],
-        ['material', 'material-options'],
-        ['year', 'year-options']
-      ].forEach(([group, id]) => {
-        const target = document.getElementById(id);
-        uniqueValues(group).forEach((value) => {
-          target.appendChild(createButton(group, value));
-        });
+      createFilterButtons('size-options', ['큰', '중간', '작은'], 'size', (value) => ({ 큰: '큰 Big', 중간: '중간 Hm', 작은: '작은 Small' }[value]));
+      createFilterButtons('material-options', [...new Set(artworks.map(work => work.material))], 'material', getMaterialLabel);
+      createFilterButtons('year-options', [...new Set(artworks.map(work => getYearStart(work.year)))].sort((a, b) => Number(b) - Number(a)), 'year', value => `${value} —`);
+    }
+
+    function render() {
+      const filtered = artworks.filter(work => {
+        return (!activeFilters.size.size || activeFilters.size.has(work.sizeGroup))
+          && (!activeFilters.material.size || activeFilters.material.has(work.material))
+          && (!activeFilters.year.size || activeFilters.year.has(getYearStart(work.year)));
       });
+
+      count.textContent = `(${filtered.length})`;
+      grid.innerHTML = filtered.map(work => `
+        <a class="work-item" href="photos/${work.id}.webp" data-id="${work.id}" data-caption="${escapeHtml(work.caption)}">
+          <img src="photos/${work.id}.webp" alt="${escapeHtml(work.caption)}" loading="lazy">
+          <div class="work-caption">${formatCaption(work.caption, '<br>', true)}</div>
+        </a>
+      `).join('');
+
+      grid.dataset.empty = filtered.length ? 'false' : 'true';
+      if (!filtered.length) grid.innerHTML = '<p class="work-empty">No works</p>';
     }
 
-    function renderGrid() {
-      artworks.forEach((artwork, index) => {
-        const card = document.createElement('a');
-        card.className = 'work-card';
-        card.href = `photos/${artwork.id}.webp`;
-        card.dataset.size = artwork.sizeGroup;
-        card.dataset.material = artwork.material;
-        card.dataset.year = artwork.year;
-        card.dataset.index = String(index);
-        card.innerHTML = `
-          <img src="photos/${artwork.id}.webp" alt="${escapeHtml(artwork.caption)}" loading="lazy" decoding="async">
-          <span class="work-caption">${formatCaption(artwork.caption, '<br>', true)}</span>
-        `;
-        card.addEventListener('click', (event) => {
-          event.preventDefault();
-          openLightbox(index);
-        });
-        grid.appendChild(card);
+    function setActiveButton(button) {
+      button.classList.toggle('is-active', activeFilters[button.dataset.group].has(button.dataset.value));
+    }
+
+    renderFilters();
+    render();
+
+    document.querySelectorAll('.work-filter-options').forEach(group => {
+      group.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+
+        const values = activeFilters[button.dataset.group];
+        if (values.has(button.dataset.value)) values.delete(button.dataset.value);
+        else values.add(button.dataset.value);
+
+        setActiveButton(button);
+        render();
       });
-    }
-
-    function matchesFilters(card) {
-      return Object.entries(activeFilters).every(([group, values]) =>
-        !values.size || values.has(card.dataset[group])
-      );
-    }
-
-    function applyFilters() {
-      let visible = 0;
-      grid.querySelectorAll('.work-card').forEach((card) => {
-        const isVisible = matchesFilters(card);
-        card.hidden = !isVisible;
-        if (isVisible) visible++;
-      });
-      count.textContent = `(${visible})`;
-    }
-
-    toggle.addEventListener('click', () => {
-      const isHidden = panel.hidden;
-      panel.hidden = !isHidden;
-      toggle.setAttribute('aria-expanded', String(isHidden));
     });
 
     clear.addEventListener('click', () => {
-      Object.values(activeFilters).forEach((values) => values.clear());
-      document.querySelectorAll('.work-filter-button').forEach((button) => {
-        button.classList.remove('is-active');
-      });
-      applyFilters();
+      Object.values(activeFilters).forEach(set => set.clear());
+      document.querySelectorAll('.work-filter-options button').forEach(button => button.classList.remove('is-active'));
+      render();
+    });
+
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      panel.hidden = expanded;
     });
 
     function openLightbox(index) {
-      current = index;
-      updateLightbox();
-      lightbox.classList.add('open');
+      const items = [...grid.querySelectorAll('.work-item')];
+      if (!items.length) return;
+      current = (index + items.length) % items.length;
+      const item = items[current];
+      lightboxImg.src = item.href;
+      lightboxImg.alt = item.dataset.caption;
+      lightboxCaption.innerHTML = formatCaption(item.dataset.caption, ' │ ');
+      lightbox.classList.add('active');
     }
 
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-    }
+    grid.addEventListener('click', (event) => {
+      const item = event.target.closest('.work-item');
+      if (!item) return;
+      event.preventDefault();
+      openLightbox([...grid.querySelectorAll('.work-item')].indexOf(item));
+    });
 
-    function show(delta) {
-      current = (current + delta + artworks.length) % artworks.length;
-      updateLightbox();
-    }
+    document.querySelector('.close').addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
 
-    function updateLightbox() {
-      const artwork = artworks[current];
-      lightboxImg.src = `photos/${artwork.id}.webp`;
-      lightboxImg.alt = artwork.caption;
-      lightboxCaption.innerHTML = formatCaption(artwork.caption, ' │ ');
-    }
-
-    lightbox.querySelector('.close').addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', (event) => {
-      if (event.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', (event) => {
-      if (!lightbox.classList.contains('open')) return;
-      if (event.key === 'Escape') closeLightbox();
-      if (event.key === 'ArrowLeft') show(-1);
-      if (event.key === 'ArrowRight') show(1);
+      if (event.target === lightbox) lightbox.classList.remove('active');
     });
 
-    renderFilters();
-    renderGrid();
-    applyFilters();
+    document.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (event.key === 'Escape') lightbox.classList.remove('active');
+      if (event.key === 'ArrowRight') openLightbox(current + 1);
+      if (event.key === 'ArrowLeft') openLightbox(current - 1);
+    });
   </script>
 </body>
 </html>
