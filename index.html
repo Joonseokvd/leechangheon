@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이창 Lee Chang</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=20261006-13">
+<link rel="stylesheet" href="style.css?v=20261006-14">
 </head>
 <body>
   <header>
@@ -13,6 +13,10 @@
   </header>
 
   <main class="grid" id="grid"></main>
+
+  <div class="mobile-landing-copy" id="mobile-landing-copy" hidden>
+    <p id="mobile-landing-text" aria-label="그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가"></p>
+  </div>
 
   <footer>
     <a class="footer-mail" href="mailto:lee.changlegs@gmail.com">✉ <span class="en">lee.changlegs@gmail.com</span></a>
@@ -32,6 +36,8 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
+    const mobileLandingCopy = document.getElementById('mobile-landing-copy');
+    const mobileLandingText = document.getElementById('mobile-landing-text');
     const title = document.querySelector('header h1');
     const footer = document.querySelector('footer');
     const reloadButton = document.getElementById('reload-page');
@@ -43,6 +49,11 @@
       '(max-width: 768px) and (pointer: coarse)'
     );
     let layoutFrame;
+    let mobileLandingStarted = false;
+
+    if (mobileQuery.matches) {
+      document.body.classList.add('mobile-landing-active');
+    }
 
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -207,6 +218,105 @@
 
     photos.forEach((src, index) => createFigure(src, index));
 
+    function typeMobileLandingText() {
+      if (!mobileLandingCopy || !mobileLandingText) return Promise.resolve();
+
+      const lines = [
+        '그는 완전히 다르게 살고싶었다.',
+        '나에게도 그만한 권리는 있지 않은가'
+      ];
+      const textSpeed = 44;
+      mobileLandingCopy.hidden = false;
+      mobileLandingCopy.classList.add('is-typing');
+      mobileLandingText.textContent = '';
+
+      return new Promise((resolve) => {
+        let lineIndex = 0;
+        let charIndex = 0;
+        let currentLine = document.createTextNode('');
+        mobileLandingText.appendChild(currentLine);
+
+        const timer = window.setInterval(() => {
+          currentLine.textContent += lines[lineIndex][charIndex];
+          charIndex++;
+
+          if (charIndex < lines[lineIndex].length) return;
+
+          lineIndex++;
+          charIndex = 0;
+
+          if (lineIndex >= lines.length) {
+            window.clearInterval(timer);
+            mobileLandingCopy.classList.remove('is-typing');
+            mobileLandingCopy.classList.add('is-complete');
+            resolve();
+            return;
+          }
+
+          mobileLandingText.appendChild(document.createElement('br'));
+          mobileLandingText.appendChild(document.createElement('br'));
+          currentLine = document.createTextNode('');
+          mobileLandingText.appendChild(currentLine);
+        }, textSpeed);
+      });
+    }
+
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function getVisibleFigures() {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      return [...grid.querySelectorAll('figure')].filter((figure) => {
+        const rect = figure.getBoundingClientRect();
+        return (
+          rect.width > 0 &&
+          rect.height > 0 &&
+          rect.bottom > 0 &&
+          rect.right > 0 &&
+          rect.top < viewportHeight &&
+          rect.left < viewportWidth
+        );
+      });
+    }
+
+    async function pulseFigure(figure) {
+      figure.classList.remove('mobile-focus-pulse');
+      void figure.offsetWidth;
+      figure.classList.add('mobile-focus-pulse');
+      await delay(1000);
+      figure.classList.remove('mobile-focus-pulse');
+    }
+
+    async function startMobileLandingSequence() {
+      if (!mobileQuery.matches || mobileLandingStarted) return;
+      mobileLandingStarted = true;
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      scheduleLayout();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      document.body.classList.add('mobile-gallery-visible');
+
+      await typeMobileLandingText();
+      await delay(300);
+      mobileLandingCopy?.classList.add('is-finished');
+      await delay(300);
+      if (mobileLandingCopy) mobileLandingCopy.hidden = true;
+
+      const visibleFigures = getVisibleFigures().sort(() => Math.random() - 0.5).slice(0, 3);
+      for (const figure of visibleFigures) {
+        await pulseFigure(figure);
+      }
+
+      document.body.classList.add('mobile-all-clear');
+      await delay(500);
+      document.body.classList.remove('mobile-all-clear');
+      await delay(500);
+      document.body.classList.remove('mobile-landing-active', 'mobile-gallery-visible');
+    }
+
     function scheduleLayout() {
       cancelAnimationFrame(layoutFrame);
       layoutFrame = requestAnimationFrame(layoutGallery);
@@ -356,6 +466,7 @@
     window.addEventListener('load', () => {
       window.scrollTo(0, 0);
       scheduleLayout();
+      startMobileLandingSequence();
     });
     window.addEventListener('resize', scheduleLayout);
     window.addEventListener('scroll', updateInterfaceColors, { passive: true });
