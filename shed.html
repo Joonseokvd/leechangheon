@@ -12,10 +12,18 @@
 <meta property="og:url" content="https://leechang.net/shed.html">
 <title>헛간 Shed | 이창 Lee Chang</title>
 <link rel="canonical" href="https://leechang.net/shed.html">
-<link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
-<link rel="icon" href="favicon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any" data-random-favicon>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css?v=20261006-20">
+<script>
+  (() => {
+    const icons = ['favicon-1.svg', 'favicon-2.svg', 'favicon-3.svg', 'favicon-4.svg'];
+    const icon = icons[Math.floor(Math.random() * icons.length)];
+    document.querySelectorAll('link[rel~="icon"][data-random-favicon]').forEach((link) => {
+      link.href = icon;
+    });
+  })();
+</script>
 </head>
 <body class="shed-page">
   <!-- Shed archive -->
