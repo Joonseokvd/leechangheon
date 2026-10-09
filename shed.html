@@ -18,7 +18,12 @@
 <script>
   (() => {
     const icons = ['favicon-1.svg', 'favicon-2.svg', 'favicon-3.svg', 'favicon-4.svg'];
-    const icon = icons[Math.floor(Math.random() * icons.length)];
+    const storageKey = 'lee-chang-favicon';
+    const previousIcon = window.localStorage.getItem(storageKey);
+    const candidates = icons.filter((item) => item !== previousIcon);
+    const pool = candidates.length ? candidates : icons;
+    const icon = pool[Math.floor(Math.random() * pool.length)];
+    window.localStorage.setItem(storageKey, icon);
     document.querySelectorAll('link[rel~="icon"][data-random-favicon]').forEach((link) => {
       link.href = icon;
     });
