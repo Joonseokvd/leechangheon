@@ -19,11 +19,28 @@
   (() => {
     const icons = ['favicon-1.svg', 'favicon-2.svg', 'favicon-3.svg', 'favicon-4.svg'];
     const storageKey = 'lee-chang-favicon';
-    const previousIcon = window.localStorage.getItem(storageKey);
+    const getPreviousIcon = () => {
+      try {
+        if (window.localStorage) return window.localStorage.getItem(storageKey);
+      } catch (error) {}
+
+      return document.cookie
+        .split('; ')
+        .find((item) => item.startsWith(`${storageKey}=`))
+        ?.split('=')[1];
+    };
+    const setPreviousIcon = (icon) => {
+      try {
+        if (window.localStorage) window.localStorage.setItem(storageKey, icon);
+      } catch (error) {}
+
+      document.cookie = `${storageKey}=${icon}; path=/; max-age=31536000; SameSite=Lax`;
+    };
+    const previousIcon = getPreviousIcon();
     const candidates = icons.filter((item) => item !== previousIcon);
     const pool = candidates.length ? candidates : icons;
     const icon = pool[Math.floor(Math.random() * pool.length)];
-    window.localStorage.setItem(storageKey, icon);
+    setPreviousIcon(icon);
     document.querySelectorAll('link[rel~="icon"][data-random-favicon]').forEach((link) => {
       link.href = icon;
     });
