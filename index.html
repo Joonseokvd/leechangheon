@@ -10,11 +10,30 @@
 <meta property="og:title" content="이창 Lee Chang">
 <meta property="og:description" content="「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」 이 문장을 가끔 되새기며 그림을 그립니다.">
 <meta property="og:url" content="https://leechang.net/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="이창 Lee Chang">
+<meta name="twitter:description" content="「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」 이 문장을 가끔 되새기며 그림을 그립니다.">
 <title>이창 Lee Chang</title>
 <link rel="canonical" href="https://leechang.net/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any" data-random-favicon>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css?v=20261006-20">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VisualArtsEvent",
+  "name": "이창 Lee Chang",
+  "url": "https://leechang.net/",
+  "description": "「그는 완전히 다르게 살고싶었다. 나에게도 그만한 권리는 있지 않은가」 이 문장을 가끔 되새기며 그림을 그립니다.",
+  "creator": {
+    "@type": "Person",
+    "name": "이창 Lee Chang",
+    "alternateName": "Changheon Lee"
+  }
+}
+</script>
 <script>
   (() => {
     const icons = ['favicon-1.svg', 'favicon-2.svg', 'favicon-3.svg', 'favicon-4.svg'];
@@ -166,7 +185,8 @@
       const img = document.createElement('img');
       figure.dataset.layoutRandom = Math.random();
       img.src = getDisplaySrc(src);
-      img.alt = `photo ${src.match(/\d+/)[0]}`;
+      const photoNumber = Number(src.match(/\d+/)[0]);
+      img.alt = captions[photoNumber] || '이창 Lee Chang 작품';
       img.loading = mobileQuery.matches ? 'lazy' : 'eager';
       img.decoding = 'async';
       img.addEventListener('load', scheduleLayout);
